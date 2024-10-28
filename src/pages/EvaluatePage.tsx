@@ -62,16 +62,16 @@ function EvaluatePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-custom-black py-12">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-3xl font-bold mb-4">ESG Evaluation</h1>
-          <p className="text-gray-600">Upload your documents for comprehensive ESG analysis</p>
+          <h1 className="text-5xl text-custom-green font-bold mb-4">ESG Evaluation</h1>
+          <p className="text-2xl text-white">Upload your documents for comprehensive ESG analysis</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-8">
+        <div className="bg-gray-500 bg-opacity-30 rounded-2xl shadow-md p-20 ">
           <div
-            className={`relative border-2 border-dashed rounded-lg p-8 text-center ${
+            className={`relative border-2 border-dashed rounded-lg p-16 text-center ${
               dragActive ? 'border-green-500 bg-green-50' : 'border-gray-300'
             }`}
             onDragEnter={handleDrag}
@@ -91,10 +91,10 @@ function EvaluatePage() {
                 <Upload className="h-12 w-12 text-gray-400" />
               </div>
               <div>
-                <p className="text-lg font-medium">
+                <p className="text-xl text-slate-400 font-medium">
                   Drag and drop your files here or click to browse
                 </p>
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-slate-400 mt-2">
                   Supported formats: PDF, DOC, DOCX, XLSX
                 </p>
               </div>
@@ -134,8 +134,8 @@ function EvaluatePage() {
           )}
 
           <div className="mt-8 border-t pt-6">
-            <h3 className="text-lg font-medium mb-4">Instructions</h3>
-            <ul className="space-y-2 text-gray-600">
+            <h3 className="text-lg text-gray-400 font-medium mb-4">Instructions</h3>
+            <ul className="space-y-2 text-gray-400">
               <li>• Upload your company's sustainability reports or ESG documentation</li>
               <li>• Supported file formats include PDF, DOC, DOCX, and XLSX</li>
               <li>• Maximum file size: 50MB</li>

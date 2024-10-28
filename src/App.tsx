@@ -22,15 +22,22 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-white flex flex-col md:flex-row">
-        {/* Sidebar for desktop */}
-        <aside className="hidden md:flex flex-col p-4 bg-gray-100 w-64">
-          <NavLink to="/" icon={<Home />} text="Home" />
-          <NavLink to="/evaluate" icon={<FileText />} text="Evaluate" />
-          <NavLink to="/model" icon={<BarChart2 />} text="Model" />
-          <NavLink to="/analysis" icon={<LineChart />} text="Analysis" />
-          <NavLink to="/contact" icon={<Users />} text="Contact" />
-        </aside>
+      <div className="min-h-screen bg-white flex flex-col">
+        {/* Top Navbar for both desktop and mobile */}
+        <header className="bg-custom-black text-custum-green p-3 flex justify-between items-center">
+          <h1 className="text-white text-3xl font-semibold flex-1">My App</h1>
+          <nav className="hidden md:flex space-x-4 flex-1 justify-center">
+            <NavLink to="/" icon={<Home />} text="Home" />
+            <NavLink to="/evaluate" icon={<FileText />} text="Evaluate" />
+            <NavLink to="/model" icon={<BarChart2 />} text="Model" />
+            <NavLink to="/analysis" icon={<LineChart />} text="Analysis" />
+            <NavLink to="/contact" icon={<Users />} text="Contact" />
+          </nav>
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden">
+            {isMenuOpen ? <X /> : <Menu />}
+          </button>
+        </header>
+
 
         {/* Mobile Navbar */}
         <div className="flex justify-between items-center p-4 md:hidden">
@@ -51,7 +58,7 @@ function App() {
         )}
 
         {/* Page content */}
-        <main className="flex-1 p-6">
+        <main className="bg-custom-black flex-1 p-6">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/evaluate" element={<EvaluatePage />} />
@@ -68,9 +75,9 @@ function App() {
 const NavLink: React.FC<NavLinkProps> = ({ to, icon, text }) => (
   <Link
     to={to}
-    className="flex items-center space-x-1 text-gray-600 hover:text-green-600 transition-colors duration-200"
+    className="flex items-center space-x-1 px-4 py-3 text-custom-gray hover:text-custom-green transition-colors duration-200"
   >
-    {icon}
+    {React.cloneElement(icon as React.ReactElement, { size: 32 })} 
     <span>{text}</span>
   </Link>
 );

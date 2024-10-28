@@ -24,16 +24,16 @@ const HeroSection = () => (
   >
     <div className="absolute inset-0 flex items-center justify-center">
       <div className="text-center text-white px-4">
-        <h1 className="text-5xl font-bold mb-6">ESG Analytics Platform</h1>
-        <p className="text-xl mb-8 max-w-2xl">
+        <h1 className="text-8xl font-bold mb-6">ESG Analytics Platform</h1>
+        <p className="text-2xl text-center mb-8 max-w-2xl">
           Empowering sustainable business decisions through comprehensive Environmental, Social, and Governance analysis
         </p>
         <Link
           to="/evaluate"
-          className="inline-flex items-center bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors duration-200"
+          className="inline-flex items-center bg-green-600 text-white text-2xl px-10 py-6 rounded-lg hover:bg-custom-green transition-colors duration-200"
         >
           Start Analysis
-          <ArrowRight className="ml-2" size={20} />
+          <ArrowRight className="ml-2" size={30} />
         </Link>
       </div>
     </div>
@@ -42,9 +42,9 @@ const HeroSection = () => (
 
 // Features Section
 const FeaturesSection = () => (
-  <div className="py-20 bg-white">
+  <div className="py-20 bg-custom-gray-600">
     <div className="max-w-7xl mx-auto px-4">
-      <h2 className="text-3xl font-bold text-center mb-16">ESG Components</h2>
+      <h2 className="text-custom-green text-6xl font-bold text-center mb-16">ESG Components</h2>
       <div className="grid md:grid-cols-3 gap-12">
         {features.map((feature, index) => (
           <FeatureCard key={index} {...feature} />
@@ -55,26 +55,26 @@ const FeaturesSection = () => (
 );
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
-  <div className="text-center hover:shadow-lg transition-shadow duration-300 p-4 rounded-lg">
+  <div className="bg-custom-dark-blue text-center hover:shadow-lg transition-shadow duration-300 p-4 rounded-2xl">
     <div className="flex justify-center mb-4">{icon}</div>
-    <h3 className="text-xl font-semibold mb-3">{title}</h3>
-    <p className="text-gray-600">{description}</p>
+    <h3 className="text-custom-green text-3xl font-semibold mb-3">{title}</h3>
+    <p className="text-white">{description}</p>
   </div>
 );
 
 const features = [
   {
-    icon: <Leaf className="h-12 w-12 text-green-600" />,
+    icon: <Leaf className="h-16 w-16 text-custom-green" />,
     title: "Environmental",
     description: "Evaluate environmental impact, resource usage, and sustainability initiatives through comprehensive metrics and analysis."
   },
   {
-    icon: <Users className="h-12 w-12 text-blue-600" />,
+    icon: <Users className="h-16 w-16 text-custom-green" />,
     title: "Social",
     description: "Assess social responsibility, community engagement, labor practices, and human rights considerations."
   },
   {
-    icon: <Scale className="h-12 w-12 text-purple-600" />,
+    icon: <Scale className="h-16 w-16 text-custom-green" />,
     title: "Governance",
     description: "Analyze corporate governance structures, ethics policies, and regulatory compliance frameworks."
   }
@@ -82,9 +82,9 @@ const features = [
 
 // Benefits Section
 const BenefitsSection = () => (
-  <div className="py-20 bg-gray-50">
+  <div className="py-20 bg-custom-black">
     <div className="max-w-7xl mx-auto px-4">
-      <h2 className="text-3xl font-bold text-center mb-16">Why Choose Our Platform</h2>
+      <h2 className="text-custom-green text-6xl font-bold text-center mb-16">Why Choose Our Platform</h2>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {benefits.map((benefit, index) => (
           <BenefitCard key={index} {...benefit} />
@@ -95,9 +95,9 @@ const BenefitsSection = () => (
 );
 
 const BenefitCard = ({ title, description }: { title: string, description: string }) => (
-  <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
-    <h3 className="text-xl font-semibold mb-3">{title}</h3>
-    <p className="text-gray-600">{description}</p>
+  <div className="bg-custom-dark-blue  p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200">
+    <h3 className="text-custom-green text-3xl font-semibold mb-3">{title}</h3>
+    <p className="text-white">{description}</p>
   </div>
 );
 

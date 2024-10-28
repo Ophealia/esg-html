@@ -46,20 +46,20 @@ function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-custom-black py-12">
       <div className="max-w-3xl mx-auto px-4">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">Contact Us</h1>
-          <p className="text-gray-600">We would love to hear from you!</p>
+          <h1 className="text-5xl text-custom-green font-bold">Contact Us</h1>
+          <p className="text-gray-400">We would love to hear from you!</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mb-12">
-          <ContactInfo icon={<Mail className="h-6 w-6 text-green-600" />} title="Email" content="contact@example.com" />
-          <ContactInfo icon={<Phone className="h-6 w-6 text-green-600" />} title="Phone" content="+123 456 7890" />
-          <ContactInfo icon={<MapPin className="h-6 w-6 text-green-600" />} title="Location" content="123 Business Rd, Suite 456" />
+          <ContactInfo icon={<Mail className="h-8 w-8 text-custom-green" />} title="Email" content="contact@example.com" />
+          <ContactInfo icon={<Phone className="h-8 w-8 text-custom-green" />} title="Phone" content="+123 456 7890" />
+          <ContactInfo icon={<MapPin className="h-8 w-8 text-custom-green" />} title="Location" content="123 Business Rd, Suite 456" />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-md">
+        <form onSubmit={handleSubmit} className="space-y-6 bg-gray-800 p-8 rounded-lg shadow-md">
           {isSubmitted && <p className="text-green-600 font-semibold">Thank you! Your message has been sent.</p>}
           {errorMessage && <p className="text-red-600 font-semibold">{errorMessage}</p>}
 
@@ -69,7 +69,7 @@ function ContactPage() {
             placeholder="Your Name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full p-4 rounded-lg border border-gray-300 focus:border-green-600"
+            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 border border-custom-green focus:border-green-600"  
           />
           <input
             type="email"
@@ -77,7 +77,7 @@ function ContactPage() {
             placeholder="Your Email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-4 rounded-lg border border-gray-300 focus:border-green-600"
+            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 border border-custom-green focus:border-green-600"
           />
           <input
             type="text"
@@ -85,14 +85,14 @@ function ContactPage() {
             placeholder="Subject"
             value={formData.subject}
             onChange={handleChange}
-            className="w-full p-4 rounded-lg border border-gray-300 focus:border-green-600"
+            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 border border-custom-green focus:border-green-600"
           />
           <textarea
             name="message"
             placeholder="Message"
             value={formData.message}
             onChange={handleChange}
-            className="w-full p-4 rounded-lg border border-gray-300 focus:border-green-600 h-32 resize-none"
+            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 border border-custom-green focus:border-green-600 h-32 resize-none"
           />
 
           <button
@@ -112,8 +112,8 @@ const ContactInfo: React.FC<ContactInfoProps> = ({ icon, title, content }) => (
   <div className="flex items-start space-x-3">
     <div className="flex-shrink-0">{icon}</div>
     <div>
-      <h3 className="font-medium">{title}</h3>
-      <p className="text-gray-600">{content}</p>
+      <h3 className="text-gray-400 text-xl font-medium">{title}</h3>
+      <p className="text-custom-green">{content}</p>
     </div>
   </div>
 );

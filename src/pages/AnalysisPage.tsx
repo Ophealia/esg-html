@@ -17,13 +17,13 @@ function AnalysisPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-7xl mx-auto px-4">
+    <div className="min-h-screen bg-custom-black py-12">
+      <div className="max-w-7xl mx-auto  text-custom-green px-4">
         <Header />
         
         <NavigationTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        <div className="grid md:grid-cols-3 gap-8 mt-8">
+        <div className="grid md:grid-cols-3 gap-8 mt-8 ">
           <MetricsList
             metrics={metrics[activeTab]}
             selectedMetric={selectedMetric}
@@ -40,30 +40,30 @@ function AnalysisPage() {
 
 const Header = () => (
   <div className="text-center mb-12">
-    <h1 className="text-3xl font-bold mb-4">ESG Analysis Dashboard</h1>
-    <p className="text-gray-600">Comprehensive analysis across Environmental, Social, and Governance dimensions</p>
+    <h1 className="text-5xl font-bold mb-4">ESG Analysis Dashboard</h1>
+    <p className="text-gray-500 text-lg">Comprehensive analysis across Environmental, Social, and Governance dimensions</p>
   </div>
 );
 
 const NavigationTabs = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: React.Dispatch<React.SetStateAction<string>> }) => (
   <div className="flex justify-center mb-8">
-    <nav className="flex space-x-4">
+    <nav className="flex space-x-8 text-nm">
       <TabButton
         active={activeTab === 'environmental'}
         onClick={() => setActiveTab('environmental')}
-        icon={<Leaf className="h-5 w-5" />}
+        icon={<Leaf className="h-7 w-7" />}
         text="Environmental"
       />
       <TabButton
         active={activeTab === 'social'}
         onClick={() => setActiveTab('social')}
-        icon={<Users className="h-5 w-5" />}
+        icon={<Users className="h-7 w-7" />}
         text="Social"
       />
       <TabButton
         active={activeTab === 'governance'}
         onClick={() => setActiveTab('governance')}
-        icon={<Scale className="h-5 w-5" />}
+        icon={<Scale className="h-7 w-7" />}
         text="Governance"
       />
     </nav>
@@ -71,14 +71,14 @@ const NavigationTabs = ({ activeTab, setActiveTab }: { activeTab: string, setAct
 );
 
 const MetricsList = ({ metrics, selectedMetric, setSelectedMetric }: { metrics: any[], selectedMetric: any, setSelectedMetric: React.Dispatch<React.SetStateAction<any>> }) => (
-  <div className="bg-white rounded-lg shadow-md p-6">
-    <h2 className="text-xl font-bold mb-4">Key Metrics</h2>
-    <div className="space-y-3">
+  <div className="bg-gray-700 rounded-lg shadow-md p-6">
+    <h2 className="text-2xl font-bold mb-4">Key Metrics</h2>
+    <div className="space-y-4">
       {metrics.map((metric, index) => (
         <button
           key={index}
-          className={`w-full text-left p-3 rounded-lg transition-colors duration-200 ${
-            selectedMetric === metric.id ? 'bg-green-50 text-green-700' : 'hover:bg-gray-50'
+          className={`w-full text-left text-xl p-3 rounded-lg transition-colors duration-200 ${
+            selectedMetric === metric.id ? 'bg-green-600 text-white' : 'hover:bg-gray-800'
           }`}
           onClick={() => setSelectedMetric(metric.id)}
         >
@@ -93,8 +93,8 @@ const MetricsList = ({ metrics, selectedMetric, setSelectedMetric }: { metrics: 
 );
 
 const DetailedAnalysis = ({ metric }: { metric: any }) => (
-  <div className="md:col-span-2 bg-white rounded-lg shadow-md p-6">
-    <h2 className="text-xl font-bold mb-6">Detailed Analysis</h2>
+  <div className="md:col-span-2 bg-gray-500 rounded-lg shadow-md p-6">
+    <h2 className="text-2xl font-bold mb-6">Detailed Analysis</h2>
     {metric ? (
       <MetricDetail metric={metric} />
     ) : (
@@ -108,15 +108,15 @@ const DetailedAnalysis = ({ metric }: { metric: any }) => (
 const MetricDetail = ({ metric }: { metric: any }) => (
   <div className="space-y-6">
     <div>
-      <h3 className="text-lg font-semibold mb-2">{metric.name}</h3>
+      <h3 className="text-xl font-semibold mb-2">{metric.name}</h3>
       <p className="text-gray-600">{metric.description}</p>
     </div>
-    <div className="bg-gray-50 p-4 rounded-lg">
+    <div className="bg-gray-700 p-4 rounded-lg">
       <div className="flex items-center justify-between mb-2">
-        <span className="font-medium">Current Score</span>
+        <span className="text-lg font-medium">Current Score</span>
         <span className={`font-bold ${getScoreColor(metric.score)}`}>{metric.score}</span>
       </div>
-      <div className="h-2 bg-gray-200 rounded-full">
+      <div className="h-2 bg-gray-700 rounded-full">
         <div className={`h-full rounded-full ${getScoreBackgroundColor(metric.score)}`} style={{ width: `${metric.score}%` }} />
       </div>
     </div>
@@ -125,11 +125,11 @@ const MetricDetail = ({ metric }: { metric: any }) => (
 );
 
 const Recommendations = ({ recommendations }: { recommendations: any[] }) => (
-  <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-    <h2 className="text-xl font-bold mb-4">Recommendations</h2>
+  <div className="mt-8 bg-gray-700 rounded-lg shadow-md p-6">
+    <h2 className="text-2xl font-bold mb-4">Recommendations</h2>
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {recommendations.map((rec, index) => (
-        <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <div key={index} className="p-4 bg-custom-black rounded-lg border border-gray-500">
           <h3 className="font-semibold mb-2">{rec.title}</h3>
           <p className="text-sm text-gray-600">{rec.description}</p>
         </div>
@@ -140,9 +140,9 @@ const Recommendations = ({ recommendations }: { recommendations: any[] }) => (
 
 const TrendAnalysis = () => (
   <div>
-    <h4 className="font-medium mb-2">Trend Analysis</h4>
-    <div className="bg-gray-50 p-4 rounded-lg">
-      <div className="h-40 flex items-center justify-center text-gray-500">Trend visualization would go here</div>
+    <h4 className="text-xl font-medium mb-2">Trend Analysis</h4>
+    <div className="bg-gray-700 p-4 rounded-lg">
+      <div className="h-40 flex items-center justify-center text-gray-300">Trend visualization would go here</div>
     </div>
   </div>
 );
@@ -150,8 +150,8 @@ const TrendAnalysis = () => (
 const TabButton = ({ active, onClick, icon, text }: { active: boolean, onClick: () => void, icon: React.ReactNode, text: string }) => (
   <button
     onClick={onClick}
-    className={`flex items-center space-x-2 px-6 py-3 rounded-lg transition-colors duration-200 ${
-      active ? 'bg-green-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
+    className={`flex items-center space-x-4 px-6 py-3 rounded-lg transition-colors duration-200 flex-1 ${
+      active ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-700 hover:bg-gray-50'
     }`}
   >
     {icon}
