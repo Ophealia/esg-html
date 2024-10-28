@@ -4,6 +4,17 @@ import { Leaf, Users, Scale } from 'lucide-react';
 function AnalysisPage() {
   const [activeTab, setActiveTab] = useState('environmental');
   const [selectedMetric, setSelectedMetric] = useState(null);
+  const metrics: { [key: string]: { id: number; name: string }[] } = {
+    environmental: [{ id: 1, name: 'Air Quality' }, { id: 2, name: 'Water Usage' }],
+    social: [{ id: 1, name: 'Employee Satisfaction' }, { id: 2, name: 'Community Engagement' }],
+    governance: [{ id: 1, name: 'Board Diversity' }, { id: 2, name: 'Audit Compliance' }],
+  };
+  
+  const recommendations: { [key: string]: string[] } = {
+    environmental: ['Reduce emissions', 'Improve water recycling'],
+    social: ['Increase employee benefits', 'Engage local communities'],
+    governance: ['Increase board diversity', 'Enhance audit processes'],
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -34,7 +45,7 @@ const Header = () => (
   </div>
 );
 
-const NavigationTabs = ({ activeTab, setActiveTab }) => (
+const NavigationTabs = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: React.Dispatch<React.SetStateAction<string>> }) => (
   <div className="flex justify-center mb-8">
     <nav className="flex space-x-4">
       <TabButton
@@ -59,7 +70,7 @@ const NavigationTabs = ({ activeTab, setActiveTab }) => (
   </div>
 );
 
-const MetricsList = ({ metrics, selectedMetric, setSelectedMetric }) => (
+const MetricsList = ({ metrics, selectedMetric, setSelectedMetric }: { metrics: any[], selectedMetric: any, setSelectedMetric: React.Dispatch<React.SetStateAction<any>> }) => (
   <div className="bg-white rounded-lg shadow-md p-6">
     <h2 className="text-xl font-bold mb-4">Key Metrics</h2>
     <div className="space-y-3">
@@ -81,7 +92,7 @@ const MetricsList = ({ metrics, selectedMetric, setSelectedMetric }) => (
   </div>
 );
 
-const DetailedAnalysis = ({ metric }) => (
+const DetailedAnalysis = ({ metric }: { metric: any }) => (
   <div className="md:col-span-2 bg-white rounded-lg shadow-md p-6">
     <h2 className="text-xl font-bold mb-6">Detailed Analysis</h2>
     {metric ? (
@@ -94,7 +105,7 @@ const DetailedAnalysis = ({ metric }) => (
   </div>
 );
 
-const MetricDetail = ({ metric }) => (
+const MetricDetail = ({ metric }: { metric: any }) => (
   <div className="space-y-6">
     <div>
       <h3 className="text-lg font-semibold mb-2">{metric.name}</h3>
@@ -113,7 +124,7 @@ const MetricDetail = ({ metric }) => (
   </div>
 );
 
-const Recommendations = ({ recommendations }) => (
+const Recommendations = ({ recommendations }: { recommendations: any[] }) => (
   <div className="mt-8 bg-white rounded-lg shadow-md p-6">
     <h2 className="text-xl font-bold mb-4">Recommendations</h2>
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -136,7 +147,7 @@ const TrendAnalysis = () => (
   </div>
 );
 
-const TabButton = ({ active, onClick, icon, text }) => (
+const TabButton = ({ active, onClick, icon, text }: { active: boolean, onClick: () => void, icon: React.ReactNode, text: string }) => (
   <button
     onClick={onClick}
     className={`flex items-center space-x-2 px-6 py-3 rounded-lg transition-colors duration-200 ${
@@ -148,7 +159,7 @@ const TabButton = ({ active, onClick, icon, text }) => (
   </button>
 );
 
-const getScoreColor = (score) => (score >= 80 ? 'text-green-600' : score >= 60 ? 'text-yellow-600' : 'text-red-600');
-const getScoreBackgroundColor = (score) => (score >= 80 ? 'bg-green-600' : score >= 60 ? 'bg-yellow-600' : 'bg-red-600');
+const getScoreColor = (score: number) => (score >= 80 ? 'text-green-600' : score >= 60 ? 'text-yellow-600' : 'text-red-600');
+const getScoreBackgroundColor = (score: number) => (score >= 80 ? 'bg-green-600' : score >= 60 ? 'bg-yellow-600' : 'bg-red-600');
 
 export default AnalysisPage;

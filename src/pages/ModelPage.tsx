@@ -76,7 +76,7 @@ function ModelPage() {
   );
 }
 
-const ArchitectureComponent = ({ icon, title, description }) => (
+const ArchitectureComponent = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
   <div className="flex items-start space-x-4">
     <div className="flex-shrink-0">{icon}</div>
     <div>

@@ -54,7 +54,7 @@ const FeaturesSection = () => (
   </div>
 );
 
-const FeatureCard = ({ icon, title, description }) => (
+const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
   <div className="text-center hover:shadow-lg transition-shadow duration-300 p-4 rounded-lg">
     <div className="flex justify-center mb-4">{icon}</div>
     <h3 className="text-xl font-semibold mb-3">{title}</h3>
@@ -94,7 +94,7 @@ const BenefitsSection = () => (
   </div>
 );
 
-const BenefitCard = ({ title, description }) => (
+const BenefitCard = ({ title, description }: { title: string, description: string }) => (
   <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
     <h3 className="text-xl font-semibold mb-3">{title}</h3>
     <p className="text-gray-600">{description}</p>
