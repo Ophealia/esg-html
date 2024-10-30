@@ -49,8 +49,8 @@ function ContactPage() {
     <div className="min-h-screen bg-custom-black py-12">
       <div className="max-w-3xl mx-auto px-4">
         <div className="text-center mb-8">
-          <h1 className="text-5xl text-custom-green font-bold">Contact Us</h1>
-          <p className="text-gray-400">We would love to hear from you!</p>
+          <h1 className="text-5xl text-gre font-bold mb-4">Contact Us</h1>
+          <p className="text-custom-gray mb-20">We would love to hear from you!</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mb-12">
@@ -69,7 +69,7 @@ function ContactPage() {
             placeholder="Your Name"
             value={formData.name}
             onChange={handleChange}
-            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 border border-custom-green focus:border-green-600"  
+            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 focus:border-green-600"  
           />
           <input
             type="email"
@@ -77,7 +77,7 @@ function ContactPage() {
             placeholder="Your Email"
             value={formData.email}
             onChange={handleChange}
-            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 border border-custom-green focus:border-green-600"
+            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 focus:border-green-600"
           />
           <input
             type="text"
@@ -85,14 +85,14 @@ function ContactPage() {
             placeholder="Subject"
             value={formData.subject}
             onChange={handleChange}
-            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 border border-custom-green focus:border-green-600"
+            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 focus:border-green-600"
           />
           <textarea
             name="message"
             placeholder="Message"
             value={formData.message}
             onChange={handleChange}
-            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 border border-custom-green focus:border-green-600 h-32 resize-none"
+            className="placeholder-gray-200 w-full p-4 rounded-lg bg-gray-500 focus:border-green-600 h-32 resize-none"
           />
 
           <button

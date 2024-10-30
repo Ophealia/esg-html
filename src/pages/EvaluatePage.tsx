@@ -5,6 +5,8 @@ function EvaluatePage() {
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+  const [companyType, setCompanyType] = useState<string>('');
+  const [threshold, setThreshold] = useState<number>(50); // 默认阈值为50
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -65,14 +67,42 @@ function EvaluatePage() {
     <div className="min-h-screen bg-custom-black py-12">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-5xl text-custom-green font-bold mb-4">ESG Evaluation</h1>
+          <h1 className="text-5xl text-gre font-bold mb-4">ESG Evaluation</h1>
           <p className="text-2xl text-white">Upload your documents for comprehensive ESG analysis</p>
         </div>
 
-        <div className="bg-gray-500 bg-opacity-30 rounded-2xl shadow-md p-20 ">
+        <div className="bg-gray-500 bg-opacity-30 rounded-2xl shadow-md p-20">
+          <div className="mb-6">
+            <h3 className="text-lg text-gre font-medium mb-4">Select company type</h3>
+            <select
+              value={companyType}
+              onChange={(e) => setCompanyType(e.target.value)}
+              className="w-full p-2 bg-custom-gray border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-custom-gray"
+            >
+              {['Manufacturing', 'Service', 'Retail', 'Finance', 'Technology', 'Others'].map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mb-6">
+            <h3 className="text-lg text-gre font-medium mb-4">Set threshold</h3>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={threshold}
+              onChange={(e) => setThreshold(Number(e.target.value))}
+              className="w-full"
+            />
+            <p className="text-gray-400 text-center">Current threshold: {threshold}</p>
+          </div>
+
           <div
             className={`relative border-2 border-dashed rounded-lg p-16 text-center ${
-              dragActive ? 'border-green-500 bg-green-50' : 'border-gray-300'
+              dragActive ? 'border-green-500 bg-green-500' : 'border-gray-300'
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}

@@ -1,11 +1,16 @@
+// HomePage.tsx
 import React from 'react';
 import { ArrowRight, Leaf, Users, Scale } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import EarthScene from '../components/EarthScene';
 
-// Home Page Component
 function HomePage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      {/*<div className="absolute inset-0 -z-10">
+        <EarthScene />
+      </div>*/}
+
       <HeroSection />
       <FeaturesSection />
       <BenefitsSection />
@@ -13,38 +18,36 @@ function HomePage() {
   );
 }
 
-// Hero Section
 const HeroSection = () => (
   <div
-    className="relative h-[600px] bg-cover bg-center"
+    className="relative h-[600px] bg-cover bg-center flex flex-col items-center justify-center"
     style={{
       backgroundImage:
         'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80")'
     }}
   >
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="text-center text-white px-4">
-        <h1 className="text-8xl font-bold mb-6">ESG Analytics Platform</h1>
-        <p className="text-2xl text-center mb-8 max-w-2xl">
-          Empowering sustainable business decisions through comprehensive Environmental, Social, and Governance analysis
-        </p>
-        <Link
-          to="/evaluate"
-          className="inline-flex items-center bg-green-600 text-white text-2xl px-10 py-6 rounded-lg hover:bg-custom-green transition-colors duration-200"
-        >
-          Start Analysis
-          <ArrowRight className="ml-2" size={30} />
-        </Link>
-      </div>
+    <div className="text-center text-white px-4 z-20">
+      <h1 className="text-6xl md:text-8xl font-bold mb-6">ESG Analytics Platform</h1>
+      <p className="text-lg md:text-2xl text-center mb-8">
+        Empowering sustainable business decisions through<br /> 
+        comprehensive Environmental, Social, and Governance analysis
+      </p>
+      <Link
+        to="/evaluate"
+        className="inline-flex items-center bg-white font-bold text-custom-black text-2xl px-10 py-6 rounded-xl hover:bg-gre hover:text-black transition-colors duration-200"
+        aria-label="Start Analysis"
+      >
+        Start Analysis
+        <ArrowRight className="ml-2" size={30} />
+      </Link>
     </div>
   </div>
 );
 
-// Features Section
 const FeaturesSection = () => (
   <div className="py-20 bg-custom-gray-600">
     <div className="max-w-7xl mx-auto px-4">
-      <h2 className="text-custom-green text-6xl font-bold text-center mb-16">ESG Components</h2>
+      <h2 className="text-gre text-6xl font-bold text-center mb-16">ESG Components</h2>
       <div className="grid md:grid-cols-3 gap-12">
         {features.map((feature, index) => (
           <FeatureCard key={index} {...feature} />
@@ -57,34 +60,21 @@ const FeaturesSection = () => (
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
   <div className="bg-custom-dark-blue text-center hover:shadow-lg transition-shadow duration-300 p-4 rounded-2xl">
     <div className="flex justify-center mb-4">{icon}</div>
-    <h3 className="text-custom-green text-3xl font-semibold mb-3">{title}</h3>
+    <h3 className="text-gre text-3xl font-semibold mb-3">{title}</h3>
     <p className="text-white">{description}</p>
   </div>
 );
 
 const features = [
-  {
-    icon: <Leaf className="h-16 w-16 text-custom-green" />,
-    title: "Environmental",
-    description: "Evaluate environmental impact, resource usage, and sustainability initiatives through comprehensive metrics and analysis."
-  },
-  {
-    icon: <Users className="h-16 w-16 text-custom-green" />,
-    title: "Social",
-    description: "Assess social responsibility, community engagement, labor practices, and human rights considerations."
-  },
-  {
-    icon: <Scale className="h-16 w-16 text-custom-green" />,
-    title: "Governance",
-    description: "Analyze corporate governance structures, ethics policies, and regulatory compliance frameworks."
-  }
+  { icon: <Leaf className="h-16 w-16 text-gre" />, title: "Environmental", description: "Evaluate environmental impact, resource usage, and sustainability initiatives." },
+  { icon: <Users className="h-16 w-16 text-gre" />, title: "Social", description: "Assess social responsibility, community engagement, labor practices, and human rights." },
+  { icon: <Scale className="h-16 w-16 text-gre" />, title: "Governance", description: "Analyze corporate governance structures, ethics policies, and compliance frameworks." }
 ];
 
-// Benefits Section
 const BenefitsSection = () => (
   <div className="py-20 bg-custom-black">
     <div className="max-w-7xl mx-auto px-4">
-      <h2 className="text-custom-green text-6xl font-bold text-center mb-16">Why Choose Our Platform</h2>
+      <h2 className="text-gre text-6xl font-bold text-center mb-16">Why Choose Our Platform</h2>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {benefits.map((benefit, index) => (
           <BenefitCard key={index} {...benefit} />
@@ -95,8 +85,8 @@ const BenefitsSection = () => (
 );
 
 const BenefitCard = ({ title, description }: { title: string, description: string }) => (
-  <div className="bg-custom-dark-blue  p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200">
-    <h3 className="text-custom-green text-3xl font-semibold mb-3">{title}</h3>
+  <div className="bg-custom-dark-blue p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200">
+    <h3 className="text-gre text-3xl font-semibold mb-3">{title}</h3>
     <p className="text-white">{description}</p>
   </div>
 );
