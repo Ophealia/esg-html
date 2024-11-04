@@ -1,0 +1,31 @@
+ESG-HTML
+├── public
+│   ├── icons
+│   └── textures
+├── src
+│   ├── components
+│   │   └── EarthScene.tsx
+│   ├── pages
+│   │   ├── AnalysisPage.tsx
+│   │   ├── ContactPage.tsx
+│   │   ├── EvaluatePage.tsx
+│   │   ├── HomePage.tsx
+│   │   ├── ModelPage.tsx
+│   │   └── TestPage.tsx
+│   ├── App.tsx
+│   ├── index.css
+│   ├── main.tsx
+│   └── vite-env.d.ts
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── output.css
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── README.md
+├── tailwind.config.js
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
