@@ -19,7 +19,7 @@ const AnalysisPage: React.FC = () => {
         </div>
 
         <div>
-         <ESGDashboard />
+          <ESGDashboard />
         </div>
       </div>
     </div>

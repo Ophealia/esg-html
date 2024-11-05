@@ -3,21 +3,21 @@ import { Brain, Database, BarChart2, TrendingUp } from 'lucide-react';
 
 function ModelPage() {
   return (
-    <div className="min-h-screen bg-custom-black py-12">
+    <div className="min-h-screen bg-costum-black py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl text-gre font-bold mb-10">Our ESG Analysis Model</h1>
-          <p className="text-xl text-custom-gray max-w-3xl mx-auto mt-4">
+          <h1 className="text-5xl text-custom-green font-bold mb-4">Our ESG Analysis Model</h1>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
             Leveraging advanced machine learning and natural language processing to deliver comprehensive ESG insights
           </p>
         </div>
 
         {/* Model Overview */}
         <div className="grid md:grid-cols-2 gap-12 mb-20">
-          <div className="bg-black rounded-lg shadow-md p-8">
-            <h2 className="text-3xl text-gre font-bold mb-10">Model Architecture</h2>
-            <div className="text-custom-gray text-xl space-y-10">
+          <div className="bg-gray-700 rounded-lg shadow-md p-8">
+            <h2 className="text-3xl text-custom-green font-bold mb-10">Model Architecture</h2>
+            <div className="text-gray-300 text-xl space-y-10">
               <ArchitectureComponent
                 icon={<Brain className="h-10 w-10 text-purple-600" />}
                 title="Natural Language Processing"
@@ -41,8 +41,8 @@ function ModelPage() {
             </div>
           </div>
 
-          <div className="bg-balck rounded-lg shadow-md p-8">
-            <h2 className="text-3xl text-gre font-bold mb-8">Key Features</h2>
+          <div className="bg-gray-700 rounded-lg shadow-md p-8">
+            <h2 className="text-3xl text-custom-green font-bold mb-8">Key Features</h2>
             <div className="space-y-6">
               {features.map((feature, index) => (
                 <div key={index} className="border-b pb-4 last:border-b-0 last:pb-0">
@@ -56,12 +56,12 @@ function ModelPage() {
 
         {/* Methodology Section */}
         <div className="bg-gray-700 rounded-lg shadow-md p-8 mb-20">
-          <h2 className="text-3xl text-gre font-bold mb-8">Our Methodology</h2>
+          <h2 className="text-3xl text-custom-green font-bold mb-8">Our Methodology</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {methodology.map((item, index) => (
               <div key={index} className="relative flex-1 flex flex-col">
-                <div className="bg-gray-300 rounded-xl p-8 flex flex-col flex-1">
-                  <div className="absolute -top-4 left-6 bg-custom-gray text-green-700 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                <div className="bg-gray-400 rounded-xl p-8 flex flex-col flex-1">
+                  <div className="absolute -top-4 left-6 bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">
                     {index + 1}
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{item.title}</h3>

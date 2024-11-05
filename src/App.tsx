@@ -7,7 +7,6 @@ import ModelPage from './pages/ModelPage';
 import AnalysisPage from './pages/AnalysisPage';
 import ContactPage from './pages/ContactPage';
 import { FaLeaf } from 'react-icons/fa';
-import TestPage from './pages/TestPage'; 
 
 interface NavLinkProps {
   to: string;
@@ -37,7 +36,6 @@ function App() {
             <NavLink to="/model" icon={<BarChart2 />} text="Model" />
             <NavLink to="/analysis" icon={<LineChart />} text="Analysis" />
             <NavLink to="/contact" icon={<Users />} text="Contact" />
-            <NavLink to="/TestPage" icon={<Users />} text="TestPage" />
           </nav>
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden">
             {isMenuOpen ? <X /> : <Menu />}
@@ -72,7 +70,6 @@ function App() {
             <Route path="/model" element={<ModelPage />} />
             <Route path="/analysis" element={<AnalysisPage />} />
             <Route path="/contact" element={<ContactPage />} />
-            <Route path="/test" element={<TestPage />} /> 
           </Routes>
         </main>
       </div>

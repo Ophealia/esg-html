@@ -1,12 +1,48 @@
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Upload, FileText, CheckCircle, AlertCircle, LineChart, } from 'lucide-react';
+
+
+interface FileStatus {
+  file: File;
+  status: 'processing' | 'success' | 'error';
+  fileUrl?: string;
+}
+
+interface NavLinkProps {
+  to: string;
+  icon: React.ReactNode;
+  text: string;
+}
 
 function EvaluatePage() {
   const [dragActive, setDragActive] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
-  const [companyType, setCompanyType] = useState<string>('');
-  const [threshold, setThreshold] = useState<number>(50); // 默认阈值为50
+  const [files, setFiles] = useState<FileStatus[]>([]);
+
+  const [fileContent, setFileContent] = useState<string | null>(null);
+  const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+
+  const handleReadClick = async (path: string) => {
+    try {
+      console.log(path);
+      const response = await fetch(`http://localhost:3002/read-file?path=${path}`);
+      
+      if (!response.ok) {
+        throw new Error(`Error reading file: ${response.statusText}`);
+      }
+      const data = await response.text();
+      setFileContent(data);
+      setIsPreviewVisible(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleClosePreview = () => {
+    setIsPreviewVisible(false);
+    setFileContent(null);
+  };
+
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -23,43 +59,51 @@ function EvaluatePage() {
     e.stopPropagation();
     setDragActive(false);
     
-    const files = e.dataTransfer.files;
-    handleFiles(files);
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    handleFiles(droppedFiles);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    handleFiles(files);
+    const selectedFiles = Array.from(e.target.files || []);
+    handleFiles(selectedFiles);
   };
 
-  const handleFiles = (files: FileList | null) => {
-    if (files && files[0]) {
-      const selectedFile = files[0];
-      
-      // Validate file type and size
-      const isValidType = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'].includes(selectedFile.type);
-      const isValidSize = selectedFile.size <= 50 * 1024 * 1024; // 50MB
+   const handleFiles = async (selectedFiles: File[]) => {
+    const newFiles = selectedFiles.map(file => ({
+      file,
+      status: 'processing' as const,
+    }));
+    setFiles(prevFiles => [...prevFiles, ...newFiles]);
 
-      if (!isValidType) {
-        setUploadStatus('error');
-        setFile(null);
-        return;
+    for (const fileStatus of newFiles) {
+      const formData = new FormData();
+      formData.append('file', fileStatus.file);
+
+      try {
+        const response = await fetch('http://localhost:3002/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        setFiles(prevFiles =>
+          prevFiles.map(f =>
+            f.file === fileStatus.file
+              ? { ...f, status: 'success', fileUrl: result.fileUrl }
+              : f
+          )
+        );
+      } catch (error) {
+        setFiles(prevFiles =>
+          prevFiles.map(f =>
+            f.file === fileStatus.file ? { ...f, status: 'error' } : f
+          )
+        );
       }
-
-      if (!isValidSize) {
-        setUploadStatus('error');
-        setFile(null);
-        return;
-      }
-
-      setFile(selectedFile);
-      setUploadStatus('processing');
-      
-      // Simulate file processing with success/failure
-      setTimeout(() => {
-        const success = Math.random() > 0.2;
-        setUploadStatus(success ? 'success' : 'error');
-      }, 2000);
     }
   };
 
@@ -67,42 +111,14 @@ function EvaluatePage() {
     <div className="min-h-screen bg-custom-black py-12">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-5xl text-gre font-bold mb-4">ESG Evaluation</h1>
+          <h1 className="text-5xl text-custom-green font-bold mb-4">ESG Evaluation</h1>
           <p className="text-2xl text-white">Upload your documents for comprehensive ESG analysis</p>
         </div>
 
-        <div className="bg-gray-500 bg-opacity-30 rounded-2xl shadow-md p-20">
-          <div className="mb-6">
-            <h3 className="text-lg text-gre font-medium mb-4">Select company type</h3>
-            <select
-              value={companyType}
-              onChange={(e) => setCompanyType(e.target.value)}
-              className="w-full p-2 bg-custom-gray border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-custom-gray"
-            >
-              {['Manufacturing', 'Service', 'Retail', 'Finance', 'Technology', 'Others'].map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="mb-6">
-            <h3 className="text-lg text-gre font-medium mb-4">Set threshold</h3>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={threshold}
-              onChange={(e) => setThreshold(Number(e.target.value))}
-              className="w-full"
-            />
-            <p className="text-gray-400 text-center">Current threshold: {threshold}</p>
-          </div>
-
+        <div className="bg-gray-500 bg-opacity-30 rounded-2xl shadow-md p-20 ">
           <div
             className={`relative border-2 border-dashed rounded-lg p-16 text-center ${
-              dragActive ? 'border-green-500 bg-green-500' : 'border-gray-300'
+              dragActive ? 'border-green-500 bg-green-50' : 'border-gray-300'
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -130,37 +146,54 @@ function EvaluatePage() {
               </div>
             </div>
           </div>
-
-          {file && (
-            <div className="mt-6">
+          
+          {/* Show the list of uploaded files */}
+          {files.map((fileStatus, index) => (
+            <div key={index} className="mt-4">
               <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
                 <FileText className="h-6 w-6 text-gray-500" />
                 <div className="flex-1">
-                  <p className="font-medium">{file.name}</p>
+                  <p className="font-medium">{fileStatus.file.name}</p>
                   <p className="text-sm text-gray-500">
-                    {(file.size / 1024 / 1024).toFixed(2)} MB
+                    {(fileStatus.file.size / 1024 / 1024).toFixed(2)} MB
                   </p>
                 </div>
-                {uploadStatus === 'processing' && (
+                {fileStatus.status === 'processing' && (
                   <div className="flex items-center text-blue-600">
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-2" />
                     Processing
                   </div>
                 )}
-                {uploadStatus === 'success' && (
+                {fileStatus.status === 'success' && (
                   <div className="flex items-center text-green-600">
                     <CheckCircle className="h-5 w-5 mr-2" />
                     Complete
                   </div>
                 )}
-                {uploadStatus === 'error' && (
+                {fileStatus.status === 'error' && (
                   <div className="flex items-center text-red-600">
                     <AlertCircle className="h-5 w-5 mr-2" />
                     Error
                   </div>
                 )}
               </div>
+
+              {/* Show the download link */}
+              {fileStatus.status === 'success' && fileStatus.fileUrl && (
+                <div className="mt-4">
+                  <a href={fileStatus.fileUrl} download className="text-blue-500 underline">
+                    Download File
+                  </a>
+                </div>
+              )}
             </div>
+          ))}
+
+          {/* Show Analysis link if at least one file has been successfully uploaded */}
+          {files.some(file => file.status === 'success') && (
+            <nav className="hidden md:flex space-x-4 flex-1 justify-center">
+            <NavLink to="/analysis" icon={<LineChart />} text="Analysis" />
+            </nav>
           )}
 
           <div className="mt-8 border-t pt-6">
@@ -175,8 +208,86 @@ function EvaluatePage() {
           </div>
         </div>
       </div>
+      
+      <div className="mt-8">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl text-custom-green font-bold mb-4">Prompt Management System</h1>
+            <p className="text-2xl text-white">Manage and organize LLM prompts and configurations</p>
+          </div>
+
+        {/* Prompt Management List */}
+        <div className="space-y-6">
+          {[
+            { title: "Parse", path: "data/prompt/user_prompt.txt" },
+            { title: "Annotate", path: "data/prompt/annotation/user_prompt.txt" },
+            { title: "Realtime Info", path: "data/prompt/real_time_info/user_prompt.txt" },
+            { title: "Greenwash", path: "data/prompt/greenwashing/user_prompt.txt" },
+            { title: "Retrieve", path: "data/esg_retrieve/retrieve_questions.xlsx" },
+          ].map((item, index) => (
+            <div key={index} className="flex items-center justify-between bg-gray-800 rounded-lg p-4 shadow-lg">
+              <div className="flex items-center">
+                <div className="mr-4">
+                  <FileText className="h-8 w-8 text-gray-400" />
+                </div>
+                <div>
+                  <h2 className="text-xl text-white font-semibold">{item.title}</h2>
+                  <p className="text-sm text-gray-400">{item.path}</p>
+                </div>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600"
+                  onClick={() => handleReadClick(item.path)}
+                >
+                  Read
+                </button>
+                <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600">Modify</button>
+                {item.title === "Retrieve" && (
+                  <button className="bg-purple-500 text-white px-3 py-1 rounded-md hover:bg-purple-600">+ Add</button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {isPreviewVisible && (
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+            <div className="bg-white rounded-lg p-6 w-3/4 max-w-4xl">
+              <h2 className="text-2xl font-bold mb-4">File Preview</h2>
+              <pre className="bg-gray-100 p-4 text-xs rounded-lg overflow-auto max-h-96">{fileContent}</pre>
+              <button
+                className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                onClick={handleClosePreview}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+
     </div>
   );
 }
+
+const NavLink: React.FC<NavLinkProps> = ({ to, icon, text }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(to);
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="flex items-center space-x-1 px-4 py-3 bg-green-600 text-custom-gray hover:text-black border-2 border-custom-gray rounded-lg transition-colors duration-200"
+    >
+      {React.cloneElement(icon as React.ReactElement, { size: 32 })}
+      <span>{text}</span>
+    </button>
+  );
+};
 
 export default EvaluatePage;
