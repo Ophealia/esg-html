@@ -6,7 +6,12 @@ import { SocialMetrics } from './metrics/SocialMetrics';
 import { GovernanceMetrics } from './metrics/GovernanceMetrics';
 import OverallMetrics from './metrics/OverallMetrics';
 
-const ESGDashboard: React.FC = () => {
+interface ESGDashboardProps {
+  company: string;
+}
+
+
+const ESGDashboard: React.FC<ESGDashboardProps> = ({ company }) => {
   const [activeTab, setActiveTab] = useState<'overall' |'environmental' | 'social' | 'governance'>('overall');
 
   return (

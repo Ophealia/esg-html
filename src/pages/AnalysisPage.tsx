@@ -25,8 +25,8 @@ const AnalysisPage: React.FC = () => {
     fetchCompanies();
   }, []);
 
-  const handleCompanyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCompany(event.target.value);
+  const handleCompanyClick = (company: string) => {
+    setSelectedCompany(company);
   };
 
   return (
@@ -36,28 +36,32 @@ const AnalysisPage: React.FC = () => {
           <div>
             <h1 className="text-3xl font-bold ">ESG Performance Analysis</h1>
             <p className="text-gray-400 mt-2">Comprehensive analysis of Environmental, Social, and Governance metrics</p>
-            <select
-              className="mt-4 p-4 bg-gray-800 text-white rounded"
-              value={selectedCompany}
-              onChange={handleCompanyChange}
-            >
-              <option value="">Select a company</option>
-              {companies.map((company, index) => (
-                <option key={index} value={company}>
+            <div className="flex items-center space-x-2 bg-green-900/30 px-4 py-2 rounded-lg">
+              <Leaf className="text-green-500" />
+              <span className="text-green-500 font-semibold">84.3 Overall Score</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+      {selectedCompany ? (
+          <ESGDashboard company={selectedCompany} />
+        ) : (
+          <div className="max-w-7xl mx-auto">
+            <h1 className="text-4xl mb-4 font-bold">Select a Company</h1>
+            <ul className="bg-gray-800 text-white p-2 rounded-lg">
+              {companies.map((company) => (
+                <li
+                  key={company}
+                  className="h-20 text-3xl cursor-pointer p-2 hover:bg-gray-700"
+                  onClick={() => handleCompanyClick(company)}
+                >
                   {company}
-                </option>
+                </li>
               ))}
-            </select>
+            </ul>
           </div>
-          <div className="flex items-center space-x-2 bg-green-900/30 px-4 py-2 rounded-lg">
-            <Leaf className="text-green-500" />
-            <span className="text-green-500 font-semibold">84.3 Overall Score</span>
-          </div>
-        </div>
-
-        <div>
-          <ESGDashboard />
-        </div>
+        )}
       </div>
     </div>
   );
