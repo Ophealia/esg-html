@@ -1,49 +1,108 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { TreePine, Droplets, Trash2, Factory } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
-const emissionsData = [
-  { month: 'Jan', value: 12450 },
-  { month: 'Feb', value: 11800 },
-  { month: 'Mar', value: 11200 },
-  { month: 'Apr', value: 10900 },
-  { month: 'May', value: 10400 },
-  { month: 'Jun', value: 9800 },
+const COLORS = ['#059669', '#34d399', '#0ea5e9', '#dc2626'];
+
+const overallScoresData = [
+  { aspect: 'GHG', score: 85 },
+  { aspect: 'Energy', score: 78 },
+  { aspect: 'Water', score: 88 },
+  { aspect: 'Waste', score: 76 },
 ];
 
-const energyData = [
-  { month: 'Jan', renewable: 45, nonRenewable: 55 },
-  { month: 'Feb', renewable: 48, nonRenewable: 52 },
-  { month: 'Mar', renewable: 52, nonRenewable: 48 },
-  { month: 'Apr', renewable: 55, nonRenewable: 45 },
-  { month: 'May', renewable: 58, nonRenewable: 42 },
-  { month: 'Jun', renewable: 62, nonRenewable: 38 },
+const ghgMetricsData = [
+  { label: 'Absolute Emissions', total: 2000, density: 50 },
 ];
 
-const waterData = [
-  { month: 'Jan', consumption: 850, recycled: 200 },
-  { month: 'Feb', consumption: 820, recycled: 220 },
-  { month: 'Mar', consumption: 800, recycled: 240 },
-  { month: 'Apr', consumption: 780, recycled: 260 },
-  { month: 'May', consumption: 760, recycled: 280 },
-  { month: 'Jun', consumption: 740, recycled: 300 },
+const energyMetricsData = [
+  { label: 'Renewable Energy', total: 600, density: 60 },
+  { label: 'Non-Renewable Energy', total: 400, density: 40 },
 ];
 
-const wasteData = [
-  { month: 'Jan', recycled: 65, landfill: 35 },
-  { month: 'Feb', recycled: 68, landfill: 32 },
-  { month: 'Mar', recycled: 70, landfill: 30 },
-  { month: 'Apr', recycled: 73, landfill: 27 },
-  { month: 'May', recycled: 75, landfill: 25 },
-  { month: 'Jun', recycled: 78, landfill: 22 },
+const waterMetricsData = [
+  { label: 'Total Consumption', total: 850, density: 30 },
+  { label: 'Recycled Water', total: 300, density: 25 },
+];
+
+const wasteMetricsData = [
+  { label: 'Recycled Waste', total: 500, density: 70 },
+  { label: 'Landfill Waste', total: 200, density: 30 },
 ];
 
 export const EnvironmentalMetrics: React.FC = () => {
   return (
     <div className="space-y-6">
+      {/* Overall Scores */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-gray-900 p-6 rounded-xl border border-green-800"
+      >
+        <h3 className="text-lg font-semibold text-center mb-4">Overall Environmental Performance</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              data={overallScoresData}
+              dataKey="score"
+              nameKey="aspect"
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={80}
+              fill="#8884d8"
+              label
+            >
+              {overallScoresData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            {/* Custom Legend */}
+            <Legend
+              layout="horizontal"
+              align="center"
+              verticalAlign="bottom"
+              content={({ payload }) => (
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+                  {payload?.map((entry, index) => {
+                    // First, check if payload is of the expected type
+                    const { payload: entryData } = entry;
+                    if (!entryData || !('aspect' in entryData) || !('score' in entryData)) return null;
+
+                    const { aspect, score } = entryData; // Destructure the aspect and score
+                    const color = COLORS[index % COLORS.length]; // Set color from COLORS array
+
+                    return (
+                      <div
+                        key={index}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          marginRight: '30px',  // Add spacing between legend items
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: '12px',
+                            height: '12px',
+                            backgroundColor: color, // Use color here
+                            marginRight: '8px',
+                          }}
+                        />
+                        <span>{aspect}: {score}</span> {/* Display aspect and score */}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </motion.div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Greenhouse Gas Emissions */}
+        {/* GHG Emissions Metrics */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -51,39 +110,29 @@ export const EnvironmentalMetrics: React.FC = () => {
         >
           <div className="flex items-center mb-4">
             <Factory className="text-green-500 mr-2" />
-            <h3 className="text-lg font-semibold">Greenhouse Gas Emissions</h3>
+            <h3 className="text-lg font-semibold">GHG Emissions Metrics</h3>
           </div>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={emissionsData}>
-                <defs>
-                  <linearGradient id="emissionsGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#059669" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#059669" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-                <XAxis dataKey="month" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#111827',
-                    border: '1px solid #374151',
-                    borderRadius: '0.5rem',
-                  }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#059669"
-                  fill="url(#emissionsGradient)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={ghgMetricsData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+              <XAxis dataKey="label" stroke="#9ca3af" />
+              <YAxis yAxisId="left" orientation="left" stroke="#34d399" />
+              <YAxis yAxisId="right" orientation="right" stroke="#059669" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#111827',
+                  border: '1px solid #374151',
+                  borderRadius: '0.5rem',
+                }}
+              />
+              <Legend />
+              <Bar yAxisId="left" dataKey="total" fill="#34d399" name="Total Emissions" />
+              <Bar yAxisId="right" dataKey="density" fill="#059669" name="Emission Density" />
+            </BarChart>
+          </ResponsiveContainer>
         </motion.div>
 
-        {/* Energy Consumption */}
+        {/* Energy Consumption Metrics */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -93,37 +142,21 @@ export const EnvironmentalMetrics: React.FC = () => {
             <TreePine className="text-green-500 mr-2" />
             <h3 className="text-lg font-semibold">Energy Consumption</h3>
           </div>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={energyData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-                <XAxis dataKey="month" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#111827',
-                    border: '1px solid #374151',
-                    borderRadius: '0.5rem',
-                  }}
-                />
-                <Bar dataKey="renewable" stackId="a" fill="#059669" />
-                <Bar dataKey="nonRenewable" stackId="a" fill="#1f2937" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="flex justify-center mt-4 space-x-4 text-sm">
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-green-600 rounded-full mr-2"></div>
-              <span>Renewable</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-gray-700 rounded-full mr-2"></div>
-              <span>Non-Renewable</span>
-            </div>
-          </div>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={energyMetricsData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+              <XAxis dataKey="label" stroke="#9ca3af" />
+              <YAxis yAxisId="left" orientation="left" stroke="#34d399" />
+              <YAxis yAxisId="right" orientation="right" stroke="#059669" />
+              <Tooltip contentStyle={{ backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '0.5rem' }} />
+              <Legend />
+              <Bar yAxisId="left" dataKey="total" fill="#34d399" name="Total Energy" />
+              <Bar yAxisId="right" dataKey="density" fill="#059669" name="Energy Density" />
+            </BarChart>
+          </ResponsiveContainer>
         </motion.div>
 
-        {/* Water Consumption */}
+        {/* Water Management Metrics */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -133,43 +166,21 @@ export const EnvironmentalMetrics: React.FC = () => {
             <Droplets className="text-green-500 mr-2" />
             <h3 className="text-lg font-semibold">Water Management</h3>
           </div>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={waterData}>
-                <defs>
-                  <linearGradient id="waterGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-                <XAxis dataKey="month" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#111827',
-                    border: '1px solid #374151',
-                    borderRadius: '0.5rem',
-                  }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="consumption"
-                  stroke="#0ea5e9"
-                  fill="url(#waterGradient)"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="recycled"
-                  stroke="#059669"
-                  fill="url(#emissionsGradient)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={waterMetricsData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+              <XAxis dataKey="label" stroke="#9ca3af" />
+              <YAxis yAxisId="left" orientation="left" stroke="#0ea5e9" />
+              <YAxis yAxisId="right" orientation="right" stroke="#059669" />
+              <Tooltip contentStyle={{ backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '0.5rem' }} />
+              <Legend />
+              <Bar yAxisId="left" dataKey="total" fill="#0ea5e9" name="Total Water" />
+              <Bar yAxisId="right" dataKey="density" fill="#059669" name="Water Density" />
+            </BarChart>
+          </ResponsiveContainer>
         </motion.div>
 
-        {/* Waste Management */}
+        {/* Waste Management Metrics */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -179,34 +190,18 @@ export const EnvironmentalMetrics: React.FC = () => {
             <Trash2 className="text-green-500 mr-2" />
             <h3 className="text-lg font-semibold">Waste Management</h3>
           </div>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={wasteData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-                <XAxis dataKey="month" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#111827',
-                    border: '1px solid #374151',
-                    borderRadius: '0.5rem',
-                  }}
-                />
-                <Bar dataKey="recycled" fill="#059669" />
-                <Bar dataKey="landfill" fill="#dc2626" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="flex justify-center mt-4 space-x-4 text-sm">
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-green-600 rounded-full mr-2"></div>
-              <span>Recycled</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-red-600 rounded-full mr-2"></div>
-              <span>Landfill</span>
-            </div>
-          </div>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={wasteMetricsData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+              <XAxis dataKey="label" stroke="#9ca3af" />
+              <YAxis yAxisId="left" orientation="left" stroke="#34d399" />
+              <YAxis yAxisId="right" orientation="right" stroke="#dc2626" />
+              <Tooltip contentStyle={{ backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '0.5rem' }} />
+              <Legend />
+              <Bar yAxisId="left" dataKey="total" fill="#34d399" name="Total Waste" />
+              <Bar yAxisId="right" dataKey="density" fill="#dc2626" name="Waste Density" />
+            </BarChart>
+          </ResponsiveContainer>
         </motion.div>
       </div>
     </div>
