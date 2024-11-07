@@ -3,6 +3,12 @@ import { motion } from 'framer-motion';
 import { Building2, Users, Award, FileCheck, Shield } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 
+
+interface GovernanceMetricsProps {
+  company: string;
+}
+
+
 const boardCompositionData = [
   { name: 'Independent', value: 65 },
   { name: 'Executive', value: 25 },
@@ -33,7 +39,7 @@ const frameworkAlignmentData = [
 
 const COLORS = ['#059669', '#0ea5e9', '#6366f1'];
 
-export const GovernanceMetrics: React.FC = () => {
+export const GovernanceMetrics: React.FC<GovernanceMetricsProps> = ({ company })  => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

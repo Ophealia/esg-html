@@ -6,41 +6,19 @@ import { Leaf, Users, Building2, TreePine, Factory, Scale, Heart } from 'lucide-
 import { motion, AnimatePresence } from 'framer-motion';
 import { Newspaper, TrendingUp, AlertTriangle, Award, ArrowRight, ExternalLink } from 'lucide-react';
 
+interface ESGData {
+  environmentScore: number;
+  socialScore: number;
+  governanceScore: number;
+  esgBreakdown: Array<{
+    metric: string;
+    score: number;
+  }>;
+}
 
-
-// Mock data
-const environmentalData = [
-  { name: 'Jan', value: 65 },
-  { name: 'Feb', value: 68 },
-  { name: 'Mar', value: 72 },
-  { name: 'Apr', value: 75 },
-  { name: 'May', value: 78 },
-  { name: 'Jun', value: 82 },
-];
-
-const socialData = [
-  { name: 'Jan', value: 70 },
-  { name: 'Feb', value: 72 },
-  { name: 'Mar', value: 75 },
-  { name: 'Apr', value: 78 },
-  { name: 'May', value: 80 },
-  { name: 'Jun', value: 83 },
-];
-
-const governanceData = [
-  { name: 'Jan', value: 75 },
-  { name: 'Feb', value: 78 },
-  { name: 'Mar', value: 80 },
-  { name: 'Apr', value: 82 },
-  { name: 'May', value: 85 },
-  { name: 'Jun', value: 88 },
-];
-
-const esgBreakdownData = [
-    { name: 'Environmental', value: 82 },
-    { name: 'Social', value: 83 },
-    { name: 'Governance', value: 88 },
-  ];
+interface OverallMetricsProps {
+  company: string;
+}
 
 const environmentalDimensionsData = [
   { name: 'Energy Efficiency', value: 92 },
@@ -128,20 +106,8 @@ const getImpactColor = (impact: string) => {
   }
 };
 
-type BreakdownItem = {
-  name: string;
-  value: number;
-};
 
-type ESGData = {
-  environmentScore: number;
-  socialScore: number;
-  governanceScore: number;
-  esgBreakdown: BreakdownItem[];
-};
-
-
-const OverallMetrics: React.FC = () => {
+const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
   const [activeNews, setActiveNews] = useState<NewsItem[]>(mockNews);
   const [hoveredNews, setHoveredNews] = useState<number | null>(null);
   const [esgData, setEsgData] = useState<ESGData>({
@@ -152,44 +118,47 @@ const OverallMetrics: React.FC = () => {
   });
 
   useEffect(() => {
-    const fetchCSVData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3002/score-data');
+        const response = await fetch(`http://localhost:3002/score-data?company=${company}`);
         if (!response.ok) {
-          throw new Error(`Error fetching CSV data: ${response.statusText}`);
+          throw new Error(`Error fetching data: ${response.statusText}`);
         }
 
-        const csvText = await response.text();
-        const rows = csvText.split('\n');
-        const headers = rows[0].split(',');
+        const jsonData = await response.json();
+        const parsedData = jsonData.flat(); // Flatten the nested array structure
 
-        const parsedData = rows.slice(1).map(row => {
-          const values = row.split(',');
-          return headers.reduce((acc, header, i) => {
-            acc[header.trim()] = values[i].trim();
+        // Assuming the backend returns an array of objects with the required fields
+        const esgData = parsedData.reduce(
+          (acc: ESGData, item: any) => {
+            acc.environmentScore += item['ENV Score'] || 0;
+            acc.socialScore += item['SOC Score'] || 0;
+            acc.governanceScore += item['GOV Score'] || 0;
+            acc.esgBreakdown.push(
+              { metric: 'ENV Score', score: item['ENV Score'] || 0 },
+              { metric: 'SOC Score', score: item['SOC Score'] || 0 },
+              { metric: 'GOV Score', score: item['GOV Score'] || 0 }
+            );
             return acc;
-          }, {} as Record<string, string>);
-        });
+          },
+          {
+            environmentScore: 0,
+            socialScore: 0,
+            governanceScore: 0,
+            esgBreakdown: [],
+          } as ESGData
+        );
 
-        const latestData = parsedData[0];
-
-        setEsgData({
-          environmentScore: parseFloat(latestData['Environment Score']),
-          socialScore: parseFloat(latestData['Social Score']),
-          governanceScore: parseFloat(latestData['Governance Score']),
-          esgBreakdown: [
-            { name: 'Environmental Score', value: parseFloat(latestData['Environment Score']) },
-            { name: 'Social Score', value: parseFloat(latestData['Social Score']) },
-            { name: 'Governance Score', value: parseFloat(latestData['Governance Score']) },
-          ],
-        });
+        setEsgData(esgData);
       } catch (error) {
-        console.error('Error fetching CSV data:', error);
+        console.error('Error fetching data:', error);
       }
+
+      console.log('Data fetched:', esgData);
     };
 
-    fetchCSVData();
-  }, []);
+    fetchData();
+  }, [company]);
 
   useEffect(() => {
     const interval = setInterval(() => {

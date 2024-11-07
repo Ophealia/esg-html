@@ -3,6 +3,10 @@ import { motion } from 'framer-motion';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { TreePine, Droplets, Trash2, Factory } from 'lucide-react';
 
+interface EnvironmentalMetricsProps {
+  company: string;
+}
+
 const COLORS = ['#059669', '#34d399', '#0ea5e9', '#dc2626'];
 
 const overallScoresData = [
@@ -31,7 +35,7 @@ const wasteMetricsData = [
   { label: 'Landfill Waste', total: 200, density: 30 },
 ];
 
-export const EnvironmentalMetrics: React.FC = () => {
+export const EnvironmentalMetrics: React.FC<EnvironmentalMetricsProps> = ({ company })  => {
   return (
     <div className="space-y-6">
       {/* Overall Scores */}

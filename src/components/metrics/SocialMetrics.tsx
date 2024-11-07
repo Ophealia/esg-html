@@ -3,6 +3,11 @@ import { motion } from 'framer-motion';
 import { Users, UserCircle, GraduationCap, Heart, ChartBar } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 
+
+interface SocialMetricsProps {
+  company: string;
+}
+
 const genderData = [
   { name: 'Female', value: 45 },
   { name: 'Male', value: 52 },
@@ -36,7 +41,7 @@ const healthSafetyData = [
 
 const COLORS = ['#059669', '#0ea5e9', '#6366f1'];
 
-export const SocialMetrics: React.FC = () => {
+export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

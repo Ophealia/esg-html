@@ -68,10 +68,10 @@ const ESGDashboard: React.FC<ESGDashboardProps> = ({ company }) => {
 
         {/* Content */}
         <div className="transition-all duration-300">
-          {activeTab === 'overall' && <OverallMetrics />}            
-          {activeTab === 'environmental' && <EnvironmentalMetrics />}
-          {activeTab === 'social' && <SocialMetrics />}
-          {activeTab === 'governance' && <GovernanceMetrics />}
+          {activeTab === 'overall' && <OverallMetrics company={company} />}            
+          {activeTab === 'environmental' && <EnvironmentalMetrics company={company} />}
+          {activeTab === 'social' && <SocialMetrics company={company} />}
+          {activeTab === 'governance' && <GovernanceMetrics company={company} />}
         </div>
       </div>
     </div>
