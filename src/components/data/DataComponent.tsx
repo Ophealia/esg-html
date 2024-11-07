@@ -22,7 +22,7 @@ const DataComponent: React.FC = () => {
                 Papa.parse(csvData, {
                     header: true,
                     skipEmptyLines: true,
-                    complete: (results) => {
+                    complete: (results: { data: DataRow[]; }) => {
                         // Assert results.data as DataRow[]
                         const parsedData = results.data as DataRow[];
                         setData(parsedData);
