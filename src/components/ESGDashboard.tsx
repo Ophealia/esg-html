@@ -16,8 +16,8 @@ const ESGDashboard: React.FC<ESGDashboardProps> = ({ company }) => {
 
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-gray-950 text-white p-8">
-      <h1 className="m-6 text-4xl font-bold ">{company}</h1>
-      <div className="mx-auto">
+      <h1 className="m-6 text-6xl font-bold ">{company}</h1>
+      <div className="m-6">
         {/* Navigation Tabs */}
         <div className="flex space-x-4 mb-8">
           <button
@@ -67,7 +67,7 @@ const ESGDashboard: React.FC<ESGDashboardProps> = ({ company }) => {
         </div>
 
         {/* Content */}
-        <div className="transition-all duration-300">
+        <div className="max-w-screen-2xl transition-all duration-300">
           {activeTab === 'overall' && <OverallMetrics company={company} />}            
           {activeTab === 'environmental' && <EnvironmentalMetrics company={company} />}
           {activeTab === 'social' && <SocialMetrics company={company} />}

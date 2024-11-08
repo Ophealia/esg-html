@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { TreePine, Droplets, Trash2, Factory } from 'lucide-react';
 
+interface ESGData {
+  dimensions: Array<{
+    aspect: string;
+    score: number;
+  }>;
+}
 interface EnvironmentalMetricsProps {
   company: string;
 }
 
 const COLORS = ['#059669', '#34d399', '#0ea5e9', '#dc2626'];
-
-const overallScoresData = [
-  { aspect: 'GHG', score: 85 },
-  { aspect: 'Energy', score: 78 },
-  { aspect: 'Water', score: 88 },
-  { aspect: 'Waste', score: 76 },
-];
 
 const ghgMetricsData = [
   { label: 'Absolute Emissions', total: 2000, density: 50 },
@@ -36,6 +35,48 @@ const wasteMetricsData = [
 ];
 
 export const EnvironmentalMetrics: React.FC<EnvironmentalMetricsProps> = ({ company })  => {
+  const [esgData, setEsgData] = useState<ESGData>({
+    dimensions: []
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:3002/score-data?company=${company}`);
+        if (!response.ok) {
+          throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+
+        const jsonData = await response.json();
+        const parsedData = jsonData.flat(); // Flatten the nested array structure
+
+        // Assuming the backend returns an array of objects with the required fields
+        const reducedData = parsedData.reduce(
+          (acc: ESGData, item: any) => {
+            acc.dimensions.push(
+              { aspect: 'GHG', score: item['ENV_GHG'] || 0 },
+              { aspect: 'Energy', score: item['ENV_Energy'] || 0 },
+              { aspect: 'Water', score: item['ENV_Water'] || 0 },
+              { aspect: 'Waste', score: item['ENV_Waste'] || 0 }
+            );
+            return acc;
+          },
+          {
+            dimensions: []
+          } as ESGData
+        );
+        
+        setEsgData(reducedData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+
+      console.log('Data fetched:', esgData);
+    };
+
+    fetchData();
+  }, [company]);
+
   return (
     <div className="space-y-6">
       {/* Overall Scores */}
@@ -44,63 +85,26 @@ export const EnvironmentalMetrics: React.FC<EnvironmentalMetricsProps> = ({ comp
         animate={{ opacity: 1, y: 0 }}
         className="bg-gray-900 p-6 rounded-xl border border-green-800"
       >
-        <h3 className="text-lg font-semibold text-center mb-4">Overall Environmental Performance</h3>
+        <h3 className="text-2xl font-semibold text-center mb-4">Overall Environmental Performance</h3>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
-              data={overallScoresData}
+              data={esgData.dimensions}
               dataKey="score"
               nameKey="aspect"
               cx="50%"
               cy="50%"
-              innerRadius={60}
+              innerRadius={50}
               outerRadius={80}
               fill="#8884d8"
-              label
+              label = {({ aspect }) => `${aspect}`} 
             >
-              {overallScoresData.map((entry, index) => (
+              {esgData.dimensions.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
             {/* Custom Legend */}
-            <Legend
-              layout="horizontal"
-              align="center"
-              verticalAlign="bottom"
-              content={({ payload }) => (
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-                  {payload?.map((entry, index) => {
-                    // First, check if payload is of the expected type
-                    const { payload: entryData } = entry;
-                    if (!entryData || !('aspect' in entryData) || !('score' in entryData)) return null;
-
-                    const { aspect, score } = entryData; // Destructure the aspect and score
-                    const color = COLORS[index % COLORS.length]; // Set color from COLORS array
-
-                    return (
-                      <div
-                        key={index}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          marginRight: '30px',  // Add spacing between legend items
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: '12px',
-                            height: '12px',
-                            backgroundColor: color, // Use color here
-                            marginRight: '8px',
-                          }}
-                        />
-                        <span>{aspect}: {score}</span> {/* Display aspect and score */}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            />
+            <Legend/>
           </PieChart>
         </ResponsiveContainer>
       </motion.div>
