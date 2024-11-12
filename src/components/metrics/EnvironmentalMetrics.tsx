@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m, motion } from 'framer-motion';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { TreePine, Droplets, Trash2, Factory } from 'lucide-react';
 
@@ -9,20 +9,30 @@ interface ESGData {
     score: number;
   }>;
 }
+
+interface GHGMetrics {
+  label: string;
+  total: number;
+  density: number;
+}
+
+interface energyMetrics{
+  label: string;
+  total: number;
+  density: number;
+}
+
+interface waterMetrics{
+  label: string;
+  total: number;
+  density: number;
+}
+
 interface EnvironmentalMetricsProps {
   company: string;
 }
 
 const COLORS = ['#059669', '#34d399', '#0ea5e9', '#dc2626'];
-
-const ghgMetricsData = [
-  { label: 'Absolute Emissions', total: 2000, density: 50 },
-];
-
-const energyMetricsData = [
-  { label: 'Renewable Energy', total: 600, density: 60 },
-  { label: 'Non-Renewable Energy', total: 400, density: 40 },
-];
 
 const waterMetricsData = [
   { label: 'Total Consumption', total: 850, density: 30 },
@@ -38,6 +48,9 @@ export const EnvironmentalMetrics: React.FC<EnvironmentalMetricsProps> = ({ comp
   const [esgData, setEsgData] = useState<ESGData>({
     dimensions: []
   });
+  const [ghgMetricsData, setGhgMetricsData] = useState<GHGMetrics[]>([]);
+  const [energyMetricsData, setEnergyMetricsData] = useState<energyMetrics[]>([]);
+  const [waterMetricsData, setWaterMetricsData] = useState<waterMetrics[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,10 +85,77 @@ export const EnvironmentalMetrics: React.FC<EnvironmentalMetricsProps> = ({ comp
       }
 
       console.log('Data fetched:', esgData);
+
+      try {
+        const metricsResponse = await fetch(`http://localhost:3002/company-metrics?company=${company}`);
+        if (!metricsResponse.ok) {
+          throw new Error(`Error fetching company metrics: ${metricsResponse.statusText}`);
+        }
+        const metricsData = await metricsResponse.json();
+
+        //get green gas emissions(ghg) data
+        const getGHGData = (data: Record<string, { value: string; unit: string }>): GHGMetrics[] => {
+          const total = parseFloat(data['B-ENV_GHG_AET'].value) || 0;
+          const density = parseFloat(data['B-ENV_GHG_EIT'].value) || 0;
+
+          return [
+            {
+              label: 'Absolute Emissions',
+              total,
+              density
+            }
+          ];
+        };
+
+        const transformedData = getGHGData(metricsData);
+        setGhgMetricsData(transformedData);
+
+        //get energy consumption data
+        const getEnergyData = (data: Record<string, { value: string; unit: string }>): energyMetrics[] => {
+          const total = parseFloat(data['B-ENV_ENC_TEC'].value) || 0;
+          const density = parseFloat(data['B-ENV_ENC_ECI'].value) || 0;
+
+          return [
+            {
+              label: 'Energy Consumption',
+              total: total,
+              density: density
+            }
+          ];
+        }
+
+        const engData = getEnergyData(metricsData);
+        setEnergyMetricsData(engData);
+
+        //get water consumption data
+        const getWaterData = (data: Record<string, { value: string; unit: string }>): energyMetrics[] => {
+          const total = parseFloat(data['B-ENV_WAC_TWC'].value) || 0;
+          const density = parseFloat(data['B-ENV_WAC_WCI'].value) || 0;
+
+          return [
+            {
+              label: 'Water Consumption',
+              total: total,
+              density: density
+            }
+          ];
+        }
+
+        const wtrData = getWaterData(metricsData);
+        setWaterMetricsData(wtrData);
+
+      } catch (error) {
+        console.error('Error fetching ghg metrics:', error);
+      }
+      console.log('GHG metrics fetched:', ghgMetricsData);
+
     };
 
     fetchData();
   }, [company]);
+
+
+
 
   return (
     <div className="space-y-6">
