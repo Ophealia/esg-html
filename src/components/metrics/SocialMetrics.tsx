@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, UserCircle, GraduationCap, Heart, ChartBar } from 'lucide-react';
+import { Users, UserCircle, GraduationCap, Heart } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+
+
+interface SocialMetricsProps {
+  company: string;
+}
+
+interface genderData {
+  name: string;
+  value: number;
+}
+
+interface ageData {
+  age: string;
+  value: number;
+}
 
 const genderData = [
   { name: 'Female', value: 45 },
@@ -36,7 +51,75 @@ const healthSafetyData = [
 
 const COLORS = ['#059669', '#0ea5e9', '#6366f1'];
 
-export const SocialMetrics: React.FC = () => {
+export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
+  const [genderData, setgenderData] = useState<genderData[]>([]);
+  const [ageData, setageData] = useState<ageData[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const metricsResponse = await fetch(`http://localhost:3002/company-metrics?company=${company}`);
+        if (!metricsResponse.ok) {
+          throw new Error(`Error fetching company metrics: ${metricsResponse.statusText}`);
+        }
+        const metricsData = await metricsResponse.json();
+
+        //get green gas emissions(ghg) data
+        const getGenData = (data: Record<string, { value: string; unit: string }>): genderData[] => {
+          const value_w = parseFloat(data['B-SOC_GED_CEG_F'].value) || 0;
+          const value_m = parseFloat(data['B-SOC_GED_CEG_M'].value) || 0;
+
+          return [
+            {
+              name: 'Current employees by gender (Female)',
+              value: value_w
+            },
+            {
+              name: 'Current employeess by gender (Male)',
+              value: value_m
+            }
+          ];
+        };
+
+        const transformedData = getGenData(metricsData);
+        setgenderData(transformedData);
+
+        //get age distribution data
+        const getAgeData = (data: Record<string, { value: string; unit: string }>): ageData[] => {
+          const value_30 = parseFloat(data['B-SOC_AGD_CEA_U30'].value) || 0;
+          const value_35_50 = parseFloat(data['B-SOC_AGD_CEA_B35'].value) || 0;
+          const value_50 = parseFloat(data['B-SOC_AGD_CEA_A50'].value) || 0;
+
+          return [
+            {
+              age: '< 30',
+              value: value_30
+            },
+            {
+              age: '35-50',
+              value: value_35_50
+            },
+            {
+              age: '> 50',
+              value: value_50
+            }
+          ];
+        }
+
+        const ageData = getAgeData(metricsData);
+        setageData(ageData)
+
+      } catch (error) {
+        console.error('Error fetching ghg metrics:', error);
+      }
+      console.log('Gender metrics fetched:', genderData);
+      console.log('Age metrics fetched:', ageData);
+    };
+
+    fetchData();
+  }, [company]);
+
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -57,18 +140,18 @@ export const SocialMetrics: React.FC = () => {
                   data={genderData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
+                  innerRadius={50}
                   outerRadius={80}
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {genderData.map((entry, index) => (
+                  {genderData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#111827',
+                    backgroundColor: '#FFFFFF',
                     border: '1px solid #374151',
                     borderRadius: '0.5rem',
                   }}

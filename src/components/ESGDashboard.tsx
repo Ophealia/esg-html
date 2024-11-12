@@ -15,13 +15,14 @@ const ESGDashboard: React.FC<ESGDashboardProps> = ({ company }) => {
   const [activeTab, setActiveTab] = useState<'overall' |'environmental' | 'social' | 'governance'>('overall');
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto min-h-screen bg-gray-950 text-white p-8">
+      <h1 className="m-6 text-6xl font-bold ">{company}</h1>
+      <div className="m-6">
         {/* Navigation Tabs */}
         <div className="flex space-x-4 mb-8">
           <button
             onClick={() => setActiveTab('overall')}
-            className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+            className={`flex items-center px-6 py-3 rounded-lg transition-colors ${
               activeTab === 'overall'
                 ? 'bg-green-900 text-green-500'
                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
@@ -66,11 +67,11 @@ const ESGDashboard: React.FC<ESGDashboardProps> = ({ company }) => {
         </div>
 
         {/* Content */}
-        <div className="transition-all duration-300">
-          {activeTab === 'overall' && <OverallMetrics />}            
-          {activeTab === 'environmental' && <EnvironmentalMetrics />}
-          {activeTab === 'social' && <SocialMetrics />}
-          {activeTab === 'governance' && <GovernanceMetrics />}
+        <div className="max-w-screen-2xl transition-all duration-300">
+          {activeTab === 'overall' && <OverallMetrics company={company} />}            
+          {activeTab === 'environmental' && <EnvironmentalMetrics company={company} />}
+          {activeTab === 'social' && <SocialMetrics company={company} />}
+          {activeTab === 'governance' && <GovernanceMetrics company={company} />}
         </div>
       </div>
     </div>
