@@ -169,45 +169,7 @@ export const EnvironmentalMetrics: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Waste Management */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gray-900 p-6 rounded-xl border border-green-800"
-        >
-          <div className="flex items-center mb-4">
-            <Trash2 className="text-green-500 mr-2" />
-            <h3 className="text-lg font-semibold">Waste Management</h3>
-          </div>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={wasteData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-                <XAxis dataKey="month" stroke="#9ca3af" />
-                <YAxis stroke="#9ca3af" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#111827',
-                    border: '1px solid #374151',
-                    borderRadius: '0.5rem',
-                  }}
-                />
-                <Bar dataKey="recycled" fill="#059669" />
-                <Bar dataKey="landfill" fill="#dc2626" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="flex justify-center mt-4 space-x-4 text-sm">
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-green-600 rounded-full mr-2"></div>
-              <span>Recycled</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-red-600 rounded-full mr-2"></div>
-              <span>Landfill</span>
-            </div>
-          </div>
-        </motion.div>
+      
       </div>
     </div>
   );
