@@ -18,38 +18,34 @@ interface ageData {
   value: number;
 }
 
-const genderData = [
-  { name: 'Female', value: 45 },
-  { name: 'Male', value: 52 },
-  { name: 'Non-Binary', value: 3 },
+
+
+const genderDiversityData = [
+  { category: 'Current employees', female: 30, male: 70 },
+  { category: 'New hires', female: 40, male: 60 },
+  { category: 'Employee turnover', female: 50, male: 50 },
 ];
 
 const ageData = [
-  { age: '18-25', value: 15 },
-  { age: '26-35', value: 30 },
-  { age: '36-45', value: 25 },
-  { age: '46-55', value: 20 },
-  { age: '56+', value: 10 },
+  { age: 'Under 30', current: 40, newHires: 20, turnover: 10 },
+  { age: '30-50', current: 50, newHires: 30, turnover: 15 },
+  { age: 'Above 50', current: 20, newHires: 10, turnover: 5 },
 ];
+
 
 const trainingData = [
-  { subject: 'Technical Skills', A: 85 },
-  { subject: 'Leadership', A: 75 },
-  { subject: 'Soft Skills', A: 90 },
-  { subject: 'Compliance', A: 95 },
-  { subject: 'Innovation', A: 80 },
+  { name: 'Male', value: 30 }, // 示例数据：男性的平均培训小时数
+  { name: 'Female', value: 25 }, // 示例数据：女性的平均培训小时数
 ];
+const COLORS = ['#059669', '#0ea5e9']; // 定义颜色数组，男和女各自的颜色
 
 const healthSafetyData = [
-  { month: 'Jan', incidents: 2, nearMisses: 5 },
-  { month: 'Feb', incidents: 1, nearMisses: 4 },
-  { month: 'Mar', incidents: 1, nearMisses: 3 },
-  { month: 'Apr', incidents: 0, nearMisses: 2 },
-  { month: 'May', incidents: 0, nearMisses: 2 },
-  { month: 'Jun', incidents: 0, nearMisses: 1 },
+  { OHS: 'Fatalities', value:3 },
+  { OHS: 'High-consequence injuries',value:2 },
+  { OHS: 'Recordable injuries', value:1 },
+  { OHS: 'Recordable work-related ill health cases',value:4},
 ];
 
-const COLORS = ['#059669', '#0ea5e9', '#6366f1'];
 
 export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
   const [genderData, setgenderData] = useState<genderData[]>([]);
@@ -135,39 +131,33 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={genderData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={50}
-                  outerRadius={80}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  {genderData.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
+              <BarChart data={genderDiversityData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+                <XAxis dataKey="category" stroke="#9ca3af" />
+                <YAxis stroke="#9ca3af" />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#FFFFFF',
+                    backgroundColor: '#111827',
                     border: '1px solid #374151',
                     borderRadius: '0.5rem',
                   }}
                 />
-              </PieChart>
-            </ResponsiveContainer>
+              <Bar dataKey="female" stackId="a" fill="#059669" />
+              <Bar dataKey="male" stackId="a" fill="#0ea5e9" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="flex justify-center mt-4 space-x-4 text-sm">
+          <div className="flex items-center">
+            <div className="w-3 h-3 bg-green-600 rounded-full mr-2"></div>
+            <span>Female</span>
           </div>
-          <div className="flex justify-center mt-4 space-x-4 text-sm">
-            {genderData.map((entry, index) => (
-              <div key={entry.name} className="flex items-center">
-                <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: COLORS[index] }}></div>
-                <span>{entry.name}</span>
-              </div>
-            ))}
+          <div className="flex items-center">
+            <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+            <span>Male</span>
           </div>
-        </motion.div>
+        </div>
+      </motion.div>
 
         {/* Age Distribution */}
         <motion.div
@@ -192,9 +182,25 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
                     borderRadius: '0.5rem',
                   }}
                 />
-                <Bar dataKey="value" fill="#059669" />
+                <Bar dataKey="current" stackId="a" fill="#059669" name="Current Employees" />
+                <Bar dataKey="newHires" stackId="a" fill="#0ea5e9" name="New Hires" />
+                <Bar dataKey="turnover" stackId="a" fill="#f43f5e" name="Turnover" />
               </BarChart>
             </ResponsiveContainer>
+          </div>
+          <div className="flex justify-center mt-4 space-x-4 text-sm">
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-green-600 rounded-full mr-2"></div>
+              <span>Current Employees</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+              <span>New Hires</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+              <span>Turnover</span>
+            </div>
           </div>
         </motion.div>
 
@@ -210,11 +216,21 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={trainingData}>
-                <PolarGrid stroke="#1f2937" />
-                <PolarAngleAxis dataKey="subject" stroke="#9ca3af" />
-                <PolarRadiusAxis stroke="#9ca3af" />
-                <Radar name="Skills" dataKey="A" stroke="#059669" fill="#059669" fillOpacity={0.6} />
+              <PieChart>
+                <Pie
+                  data={trainingData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={50}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                  nameKey="name"
+                >
+                  {trainingData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
                 <Tooltip
                   contentStyle={{
                     backgroundColor: '#111827',
@@ -222,12 +238,12 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
                     borderRadius: '0.5rem',
                   }}
                 />
-              </RadarChart>
+              </PieChart>
             </ResponsiveContainer>
           </div>
         </motion.div>
 
-        {/* Health & Safety */}
+        {/* Occupational Health & Safety */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -235,13 +251,13 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
         >
           <div className="flex items-center mb-4">
             <Heart className="text-green-500 mr-2" />
-            <h3 className="text-lg font-semibold">Health & Safety</h3>
+            <h3 className="text-lg font-semibold">Occupational Health & Safety</h3>
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={healthSafetyData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-                <XAxis dataKey="month" stroke="#9ca3af" />
+                <XAxis dataKey="OHS" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
                 <Tooltip
                   contentStyle={{
@@ -250,19 +266,26 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
                     borderRadius: '0.5rem',
                   }}
                 />
-                <Bar dataKey="incidents" fill="#dc2626" />
-                <Bar dataKey="nearMisses" fill="#eab308" />
+                <Bar dataKey="value" fill="#10b981" />
               </BarChart>
             </ResponsiveContainer>
           </div>
           <div className="flex justify-center mt-4 space-x-4 text-sm">
             <div className="flex items-center">
               <div className="w-3 h-3 bg-red-600 rounded-full mr-2"></div>
-              <span>Incidents</span>
+              <span>Fatalities</span>
             </div>
             <div className="flex items-center">
               <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-              <span>Near Misses</span>
+              <span>High-consequence Injuries</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+              <span>Recordable Injuries</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+              <span>Work-Related Ill Health Cases</span>
             </div>
           </div>
         </motion.div>
