@@ -202,18 +202,37 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
         </motion.div>   
       </div>
     
-      {/* Quick Stats */}
-      <motion.div className="mt-6 bg-gray-900 p-6 rounded-xl border border-green-800">
-        <h3 className="text-xl font-semibold mb-6">Green Wash</h3>
-        <div className="space-y-6">
-          {greenwashData.map((item, index) => (
-            <div key={index} className="p-4 bg-gray-800 rounded-lg flex justify-between items-center">
-              <span>Rate</span> <span className="text-green-500 font-bold">{item.rate}</span>
-              <span>Reason</span> <span className="text-yellow-500 font-bold">{item.reason}</span>
-            </div>
-          ))}
-        </div>
-      </motion.div>
+      {/* Green Wash */}
+      <div className="flex gap-6 max-w-screen-xl mt-6">
+        <motion.div className="bg-gray-900 p-6 rounded-xl border border-green-800">
+          <div className="flex items-center justify-between mb-6">
+            <motion.div className="flex items-center">
+              <TrendingUp className="text-green-500 mr-2" />
+              <h3 className="text-2xl font-semibold">Green Wash</h3>
+            </motion.div>
+          </div>
+
+          <div className="space-y-4">
+            {greenwashData.map((item, index) => (
+              <motion.div
+                key={index}
+                className={`p-4 rounded-lg ${hoveredNews === index ? 'bg-gray-800' : 'bg-gray-700'}`}
+                onMouseEnter={() => setHoveredNews(index)}
+                onMouseLeave={() => setHoveredNews(null)}
+              >
+                <div className="grid items-center justify-between">
+                  <div className="grid text-2xl font-bold text-custom-green">Rate: {item.rate}</div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-base font-mono">
+                      <ReactMarkdown>{expandedItems[index] ? item.reason : getPreviewContent(item.reason)}</ReactMarkdown>
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>   
+      </div>
 
     </div>
   );

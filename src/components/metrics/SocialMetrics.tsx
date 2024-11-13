@@ -108,8 +108,8 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
 
         //get training data
         const getTrainingData = (data: Record<string, { value: string; unit: string }>): TrainingData[] => {
-          const female_training = parseFloat(data['B-SOC_DEV_ATH_MF'].value) || 0;
-          const male_training = parseFloat(data['B-SOC_DEV_ATH_M:'].value) || 0;
+          const female_training = parseFloat(data['B-SOC_DEV_ATH_F'].value) || 0;
+          const male_training = parseFloat(data['B-SOC_DEV_ATH_M'].value) || 0;
 
           return [
             { name: 'Female', value: female_training },
@@ -121,7 +121,7 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
         setTrainingData(trainingData);
 
       } catch (error) {
-        console.error('Error fetching company metrics:', error);
+        console.error('Error fetching soc metrics:', error);
       }
     };
 
