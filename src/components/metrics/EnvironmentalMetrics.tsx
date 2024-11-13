@@ -44,9 +44,9 @@ const ScoreCard = ({ title, icon: Icon, score }: {
     animate={{ opacity: 1, y: 0 }}
     className="bg-gray-900 p-6 rounded-xl border border-green-800 hover:border-green-600 transition-colors"
   >
-    <div className="flex items-center gap-3 mb-4">
-      <Icon className="text-green-500 h-6 w-6" />
-      <h3 className="text-lg font-semibold text-gray-100">{title}</h3>
+    <div className="flex items-center gap-3 mb-6 mt-2">
+      <Icon className="text-green-500 h-8 w-8" />
+      <h3 className="text-xl font-semibold text-gray-100">{title}</h3>
     </div>
     <div className="bg-gray-800 p-4 rounded-lg">
       <p className="text-gray-400 text-sm">Score</p>
@@ -168,8 +168,8 @@ export const EnvironmentalMetrics: React.FC<EnvironmentalMetricsProps> = ({ comp
   }, [company]);
 
   return (
-      <div className="max-w-4xl mx-auto">
-        <div className="space-y-4">
+      <div className="max-w-screen mx-auto">
+        <div className="grid grid-cols-4 gap-6">
           {esgData.dimensions.map((dimension, index) => {
             let icon;
             switch (dimension.aspect) {

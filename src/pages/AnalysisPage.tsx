@@ -32,7 +32,7 @@ const AnalysisPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-950 text-white p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center">
+        <div className="flex items-center justify-between mb-8">
           <h2 className="text-4xl mb-4 font-bold">Select a Company</h2>
             <select
               className="selectstyle ml-10"

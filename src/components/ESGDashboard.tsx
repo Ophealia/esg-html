@@ -19,49 +19,49 @@ const ESGDashboard: React.FC<ESGDashboardProps> = ({ company }) => {
       <h1 className="text-center m-6 text-6xl font-bold ">{company}</h1>
       <div className="m-6">
         {/* Navigation Tabs */}
-        <div className="flex space-x-4 mb-8">
+        <div className="grid grid-cols-4 space-x-8 mb-6">
           <button
             onClick={() => setActiveTab('overall')}
-            className={`flex items-center px-6 py-3 rounded-lg transition-colors ${
+            className={`flex items-center text-xl px-4 py-2 rounded-lg transition-colors ${
               activeTab === 'overall'
                 ? 'bg-green-900 text-green-500'
                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
             }`}
           >
-            <Leaf className="mr-2 h-5 w-5" />
+            <Leaf className="mr-2 h-7 w-7" />
             Overall
           </button>
           <button
             onClick={() => setActiveTab('environmental')}
-            className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+            className={`flex items-center text-xl px-4 py-2 rounded-lg transition-colors ${
               activeTab === 'environmental'
                 ? 'bg-green-900 text-green-500'
                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
             }`}
           >
-            <Leaf className="mr-2 h-5 w-5" />
+            <Leaf className="mr-2 h-7 w-7" />
             Environmental
           </button>
           <button
             onClick={() => setActiveTab('social')}
-            className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+            className={`flex items-center text-xl px-4 py-2 rounded-lg transition-colors ${
               activeTab === 'social'
                 ? 'bg-green-900 text-green-500'
                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
             }`}
           >
-            <Users className="mr-2 h-5 w-5" />
+            <Users className="mr-2 h-7 w-7" />
             Social
           </button>
           <button
             onClick={() => setActiveTab('governance')}
-            className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+            className={`flex items-center text-xl px-4 py-2 rounded-lg transition-colors ${
               activeTab === 'governance'
                 ? 'bg-green-900 text-green-500'
                 : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
             }`}
           >
-            <Building2 className="mr-2 h-5 w-5" />
+            <Building2 className="mr-2 h-7 w-7" />
             Governance
           </button>
         </div>
