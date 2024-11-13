@@ -16,7 +16,7 @@ const ESGDashboard: React.FC<ESGDashboardProps> = ({ company }) => {
 
   return (
     <div className="max-w-7xl mx-auto min-h-screen bg-gray-950 text-white p-8">
-      <h1 className="m-6 text-6xl font-bold ">{company}</h1>
+      <h1 className="text-center m-6 text-6xl font-bold ">{company}</h1>
       <div className="m-6">
         {/* Navigation Tabs */}
         <div className="flex space-x-4 mb-8">
