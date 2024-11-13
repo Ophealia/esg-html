@@ -56,8 +56,16 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
   };
 
   const getPreviewContent = (content: string) => {
-    const lines = content.split('\n');
-    return lines.slice(0, 3).join('\n');
+    try {
+      if (typeof content !== 'string') {
+        throw new Error('Invalid content type');
+      }
+      const lines = content.split('\n');
+      return lines.slice(0, 3).join('\n');
+    } catch (error) {
+      console.error('Error processing content:', (error as Error).message);
+      return 'Error processing content';
+    }
   };
 
   useEffect(() => {
@@ -115,8 +123,8 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
         );
 
         const realtimeData = news_parsedData.map((item: any) => ({
-          insight: item['insight'],
-          timestamp: item['timestamp']
+          insight: item['esg_insights'],
+          timestamp: item['timestamp'].split('T')[0]
         }));
 
         setRealtimeData(realtimeData);

@@ -238,7 +238,7 @@ function EvaluatePage() {
         <div className="space-y-6">
           {[
             { title: "Parse", path: "data/prompt/user_prompt.txt" },
-            { title: "Annotate", path: "data/prompt/annotation/user_prompt.txt" },
+            { title: "Annotate", path: "data/prompt/anotation/user_prompt.txt" },
             { title: "Realtime Info", path: "data/prompt/real_time_info/user_prompt.txt" },
             { title: "Greenwash", path: "data/prompt/greenwashing/user_prompt.txt" },
             { title: "Retrieve", path: "data/esg_retrieve/retrieve_questions.xlsx" },

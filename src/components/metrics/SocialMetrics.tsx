@@ -8,35 +8,32 @@ interface SocialMetricsProps {
   company: string;
 }
 
-interface genderData {
-  name: string;
-  value: number;
+interface GenderDiversityData {
+  dimensions:Array<{
+    category: string;
+    female: number;
+    male: number;
+  }>;
 }
 
 interface ageData {
   age: string;
+  current: number;
+  newHires: number;
+  turnover: number;
+}
+
+//const genderDiversityData = [
+  //{ category: 'Current employees', female: 30, male: 70 },
+  //{ category: 'New hires', female: 40, male: 60 },
+  //{ category: 'Employee turnover', female: 50, male: 50 },
+//];
+
+interface TrainingData {
+  name: string;
   value: number;
 }
 
-
-
-const genderDiversityData = [
-  { category: 'Current employees', female: 30, male: 70 },
-  { category: 'New hires', female: 40, male: 60 },
-  { category: 'Employee turnover', female: 50, male: 50 },
-];
-
-const ageData = [
-  { age: 'Under 30', current: 40, newHires: 20, turnover: 10 },
-  { age: '30-50', current: 50, newHires: 30, turnover: 15 },
-  { age: 'Above 50', current: 20, newHires: 10, turnover: 5 },
-];
-
-
-const trainingData = [
-  { name: 'Male', value: 30 }, // 示例数据：男性的平均培训小时数
-  { name: 'Female', value: 25 }, // 示例数据：女性的平均培训小时数
-];
 const COLORS = ['#059669', '#0ea5e9']; // 定义颜色数组，男和女各自的颜色
 
 const healthSafetyData = [
@@ -48,8 +45,9 @@ const healthSafetyData = [
 
 
 export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
-  const [genderData, setgenderData] = useState<genderData[]>([]);
+  const [genderData, setgenderData] = useState<GenderDiversityData>({dimensions:[]});
   const [ageData, setageData] = useState<ageData[]>([]);
+  const [trainingData, setTrainingData] = useState<TrainingData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,26 +57,29 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
           throw new Error(`Error fetching company metrics: ${metricsResponse.statusText}`);
         }
         const metricsData = await metricsResponse.json();
+        // const parsedData = metricsData.flat(); // Flatten the nested array structure
 
-        //get green gas emissions(ghg) data
-        const getGenData = (data: Record<string, { value: string; unit: string }>): genderData[] => {
-          const value_w = parseFloat(data['B-SOC_GED_CEG_F'].value) || 0;
-          const value_m = parseFloat(data['B-SOC_GED_CEG_M'].value) || 0;
+        // Assuming the backend returns an array of objects with the required fields
+        
+        const getGenderData = (data: Record<string, { value: string; unit: string }>): GenderDiversityData => {
 
-          return [
-            {
-              name: 'Current employees by gender (Female)',
-              value: value_w
-            },
-            {
-              name: 'Current employeess by gender (Male)',
-              value: value_m
-            }
-          ];
-        };
+          const female_cur = parseFloat(data['B-SOC_GED_CEG_F'].value) || 0;
+          const male_cur = parseFloat(data['B-SOC_GED_CEG_M'].value) || 0;
+          const female_new = parseFloat(data['B-SOC_GED_NHG_F'].value) || 0;
+          const male_new = parseFloat(data['B-SOC_GED_NHG_M'].value) || 0;
+          const female_turnover = parseFloat(data['B-SOC_GED_ETG_F'].value) || 0;
+          const male_turnover = parseFloat(data['B-SOC_GED_ETG_M'].value) || 0;
 
-        const transformedData = getGenData(metricsData);
-        setgenderData(transformedData);
+          return {
+            dimensions: [
+              { category: 'Current employees', female: female_cur , male: male_cur },
+              { category: 'New hires', female: female_new, male: male_new},
+              { category: 'Employee turnover', female: female_turnover , male: male_turnover}
+            ]
+          }
+        }
+        const reducedData = getGenderData(metricsData);
+        setgenderData(reducedData);
 
         //get age distribution data
         const getAgeData = (data: Record<string, { value: string; unit: string }>): ageData[] => {
@@ -86,30 +87,42 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
           const value_35_50 = parseFloat(data['B-SOC_AGD_CEA_B35'].value) || 0;
           const value_50 = parseFloat(data['B-SOC_AGD_CEA_A50'].value) || 0;
 
+          const new_hire_30 = parseFloat(data['B-SOC_AGD_NHI_U30'].value) || 0;
+          const new_hire_35_50 = parseFloat(data['B-SOC_AGD_NHI_B35'].value) || 0;
+          const new_hire_50 = parseFloat(data['B-SOC_AGD_NHI_A50'].value) || 0;
+
+          const turnover_30 = parseFloat(data['B-SOC_AGD_TOR_U30'].value) || 0;
+          const turnover_35_50 = parseFloat(data['B-SOC_AGD_TOR_B35'].value) || 0;
+          const turnover_50 = parseFloat(data['B-SOC_AGD_TOR_A50'].value) || 0;
+
+
           return [
-            {
-              age: '< 30',
-              value: value_30
-            },
-            {
-              age: '35-50',
-              value: value_35_50
-            },
-            {
-              age: '> 50',
-              value: value_50
-            }
+            { age: 'Under 30', current: value_30, newHires: new_hire_30, turnover: turnover_30 },
+            { age: '30-50', current: value_35_50, newHires: new_hire_35_50, turnover: turnover_35_50 },
+            { age: 'Above 50', current: value_50, newHires: new_hire_50, turnover: turnover_50 }
           ];
         }
 
         const ageData = getAgeData(metricsData);
-        setageData(ageData)
+        setageData(ageData);
+
+        //get training data
+        const getTrainingData = (data: Record<string, { value: string; unit: string }>): TrainingData[] => {
+          const female_training = parseFloat(data['B-SOC_DEV_ATH_MF'].value) || 0;
+          const male_training = parseFloat(data['B-SOC_DEV_ATH_M:'].value) || 0;
+
+          return [
+            { name: 'Female', value: female_training },
+            { name: 'Male', value: male_training }
+          ];
+        }
+
+        const trainingData = getTrainingData(metricsData);
+        setTrainingData(trainingData);
 
       } catch (error) {
-        console.error('Error fetching ghg metrics:', error);
+        console.error('Error fetching company metrics:', error);
       }
-      console.log('Gender metrics fetched:', genderData);
-      console.log('Age metrics fetched:', ageData);
     };
 
     fetchData();
@@ -131,7 +144,7 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={genderDiversityData}>
+              <BarChart data={genderData.dimensions}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
                 <XAxis dataKey="category" stroke="#9ca3af" />
                 <YAxis stroke="#9ca3af" />
@@ -227,7 +240,7 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
                   dataKey="value"
                   nameKey="name"
                 >
-                  {trainingData.map((entry, index) => (
+                  {trainingData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
