@@ -8,6 +8,10 @@ interface GovernanceMetricsProps {
   company: string;
 }
 
+interface boardCompositionData {
+  name: string;
+  value: number;
+}
 
 const boardCompositionData = [
   { name: 'Independent', value: 65 },

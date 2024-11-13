@@ -94,6 +94,7 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
         const esg_parsedData = esg_jsonData.flat(); 
         const news_parsedData = news_jsonData.flat(); 
         
+        console.log('greenwash_jsonData:', greenwash_jsonData);
         // Assuming the backend returns an array of objects with the required fields
         const esgData = esg_parsedData.reduce(
           (acc: ESGData, item: any) => {
@@ -127,6 +128,11 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
           timestamp: item['timestamp'].split('T')[0]
         }));
 
+        const greenwashData = greenwash_jsonData.map((item: any) => ({
+          rate: item['rate'],
+          reason: item['reason']
+        }));
+
         setRealtimeData(realtimeData);
         setEsgData(esgData);
         setGreenwashData(greenwashData);
@@ -157,8 +163,8 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
       </div>
 
       {/* Real-time News Feed */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <motion.div className="lg:col-span-2 bg-gray-900 p-6 rounded-xl border border-green-800">
+      <div className="flex gap-6 max-w-screen-xl">
+        <motion.div className="bg-gray-900 p-6 rounded-xl border border-green-800">
           <div className="flex items-center justify-between mb-6">
             <motion.div className="flex items-center">
               <Newspaper className="text-green-500 mr-2" />
@@ -193,24 +199,22 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
               </motion.div>
             ))}
           </div>
-        </motion.div>
-
-        {/* Quick Stats */}
-        <motion.div className="bg-gray-900 p-6 rounded-xl border border-green-800">
-          <h3 className="text-xl font-semibold mb-6">Green Wash</h3>
-          <div className="space-y-6">
-            <div className="p-4 bg-gray-800 rounded-lg flex justify-between items-center">
-              <span>Overall Score</span> <span className="text-green-500 font-bold">84.3</span>
-            </div>
-            <div className="p-4 bg-gray-800 rounded-lg flex justify-between items-center">
-              <span>Risk Level</span> <span className="text-yellow-500 font-bold">Low</span>
-            </div>
-            <div className="p-4 bg-gray-800 rounded-lg flex justify-between items-center">
-              <span>Compliance</span> <span className="text-blue-500 font-bold">98%</span>
-            </div>
-          </div>
-        </motion.div>
+        </motion.div>   
       </div>
+    
+      {/* Quick Stats */}
+      <motion.div className="mt-6 bg-gray-900 p-6 rounded-xl border border-green-800">
+        <h3 className="text-xl font-semibold mb-6">Green Wash</h3>
+        <div className="space-y-6">
+          {greenwashData.map((item, index) => (
+            <div key={index} className="p-4 bg-gray-800 rounded-lg flex justify-between items-center">
+              <span>Rate</span> <span className="text-green-500 font-bold">{item.rate}</span>
+              <span>Reason</span> <span className="text-yellow-500 font-bold">{item.reason}</span>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
     </div>
   );
 };
