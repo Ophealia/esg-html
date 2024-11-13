@@ -30,11 +30,29 @@ function EvaluatePage() {
       if (!response.ok) {
         throw new Error(`Error reading file: ${response.statusText}`);
       }
-      const data = await response.text();
-      setFileContent(data);
-      setIsPreviewVisible(true);
-    } catch (error) {
+      const data = await response.arrayBuffer();
+      
+      if (path.endsWith('.xlsx')) {
+        const worker = new Worker(new URL('../worker/xlsxWorker.js', import.meta.url));
+        worker.postMessage({ data, path });
+
+        worker.onmessage = function (e) {
+          if (e.data.error) {
+            setIsPreviewVisible(false);
+          } else {
+            setFileContent(e.data.result);
+            setIsPreviewVisible(true);
+          }
+          worker.terminate();
+        };
+      } else {
+        const text = new TextDecoder().decode(data);
+        setFileContent(text);
+        setIsPreviewVisible(true);
+      }
+    } catch (error: any) {
       console.error(error);
+      setIsPreviewVisible(false);
     }
   };
 
@@ -68,7 +86,7 @@ function EvaluatePage() {
     handleFiles(selectedFiles);
   };
 
-   const handleFiles = async (selectedFiles: File[]) => {
+  const handleFiles = async (selectedFiles: File[]) => {
     const newFiles = selectedFiles.map(file => ({
       file,
       status: 'processing' as const,
@@ -242,7 +260,12 @@ function EvaluatePage() {
                 >
                   Read
                 </button>
-                <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600">Modify</button>
+                <button 
+                  className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600"
+                  onClick={() => handleReadClick(item.path)}
+                >
+                  Modify
+                </button>
                 {item.title === "Retrieve" && (
                   <button className="bg-purple-500 text-white px-3 py-1 rounded-md hover:bg-purple-600">+ Add</button>
                 )}
