@@ -24,11 +24,11 @@ function Validation() {
 
             console.log('data:', data);
             const company = data[0].map((item: any) => {
-                console.log('item:', item);  // 检查 item 是否包含所有属性
-              return {
-                name: item['report'],
-                missingValue: item['total_missing_fields_count'],
-                score: item['final_score'],
+                console.log('item:', item); 
+                return {
+                    name: item['report'],
+                    missingValue: item['total_missing_fields_count'],
+                    score: item['final_score'],
               };
             });
 

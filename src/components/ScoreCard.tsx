@@ -18,10 +18,10 @@ export const ScoreCard: React.FC<ScoreCardProps> = ({ title, score, icon }) => {
       <div className="flex items-center justify-between">
         <div className="text-green-500">{icon}</div>
       </div>
-      <h3 className="text-white text-2xl mt-4">{title}</h3>
+      <h3 className="text-white text-2xl font-bold mt-4">{title}</h3>
       <div className="flex items-end mt-2">
-        <span className="text-3xl font-bold text-white">{score}</span>
-        <span className="text-green-500 ml-2">/10</span>
+        <span className="text-4xl font-bold text-custom-green">{score}</span>
+        <span className="text-white ml-2">/10</span>
       </div>
     </motion.div>
   );

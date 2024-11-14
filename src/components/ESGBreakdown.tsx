@@ -13,7 +13,7 @@ interface ESGBreakdownProps {
 export const ESGBreakdown: React.FC<ESGBreakdownProps> = ({ data}) => {
   return (
     <div className="bg-gray-900 p-6 rounded-xl border border-green-800">
-      <h3 className="text-white text-lg mb-4">ESG Score Breakdown</h3>
+      <h3 className="text-white text-2xl mb-4">ESG Score Breakdown</h3>
       <div className="h-64">
 
         <ResponsiveContainer width="100%" height="100%">
