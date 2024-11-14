@@ -96,23 +96,26 @@ function EvaluatePage() {
     );
 
     try {
+      const startTime = Date.now();
       //console.log('to backend filestatus', fileStatus);
       const response = await fetch(`http://localhost:3002/start-analysis?file=${fileStatus.file.name}`)
       
       if (response.ok) {
         const result = await response.json();
         console.log('analysis result', result);
-        setFiles(prevFiles =>
-          prevFiles.map(f =>
-            f.file === fileStatus.file ? { ...f, analysisStatus: 'complete' } : f
-          )
-        );
-      }
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(60000 - elapsedTime, 0);
 
-      if (!response.ok) {
+        setTimeout(() => {
+          setFiles(prevFiles =>
+            prevFiles.map(f =>
+              f.file === fileStatus.file ? { ...f, analysisStatus: 'complete' } : f
+            )
+          );
+        }, remainingTime);
+      } else {
         throw new Error(`Error starting analysis: ${response.statusText}`);
       }
-
     } catch (error) {
       console.error('Error starting analysis:', error);
     }
@@ -263,19 +266,15 @@ function EvaluatePage() {
               <nav className="hidden md:flex space-x-4 flex-1 justify-center">
                 {file.status === 'success' && (
                   <nav className="hidden md:flex space-x-4 flex-1 justify-center">
-                    {file.analysisStatus === 'complete' ? 
-                      <NavLink to="/analysis" icon={<LineChart />} text="Analysis" /> 
-                      : null
-                    }
                     {file.analysisStatus === 'not_started' ? (
-                      <button onClick={() => startAnalysis(file)} className="flex items-center space-x-2">
+                        <button onClick={() => startAnalysis(file)} className="flex items-center space-x-1 px-4 py-3 bg-green-600 text-custom-gray hover:text-black border-2 border-custom-gray rounded-lg transition-colors duration-200">
                         <LineChart />
                         <span>Start Analysis</span>
                       </button>
                     ) : file.analysisStatus === 'complete' ? (
                       <NavLink to="/analysis" icon={<LineChart />} text="Analysis" />
                     ) : (
-                      <span>Analyzing...</span>
+                      <span className='items-center space-x-1 px-4 py-3 bg-green-600 text-custom-gray hover:text-black border-2 border-custom-gray rounded-lg'>Analyzing...</span>
                     )}
                   </nav>
                 )}
