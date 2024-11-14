@@ -3,3 +3,57 @@
 @import 'tailwindcss/utilities';
 
 
+@keyframes pulse-green {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(127, 240, 0, 0.2); }
+    50% { box-shadow: 0 0 40px rgba(127, 240, 0, 0.4); }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-pulse-green {
+    animation: pulse-green 2s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite;
+  }
+  
+  .text-gradient {
+    background: linear-gradient(to right, #7FF000, #2F9E44);
+    -webkit-background-clip: text; /* Safari and Chrome */
+    -webkit-text-fill-color: transparent; /* Safari and Chrome */
+    background-clip: text; /* Standard for other browsers */
+    color: transparent; /* Fallback for older browsers */
+  }
+  
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(31, 41, 55, 0.5);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #7FF000;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6DD000;
+  }

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, FileText, CheckCircle, AlertCircle, LineChart, } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle, LineChart, Files, } from 'lucide-react';
 
 
 interface FileStatus {
   file: File;
   status: 'processing' | 'success' | 'error';
   fileUrl?: string;
+  analysisStatus?: 'complete' | 'not_started' | 'analyzing' |'error';
 }
 
 interface NavLinkProps {
@@ -14,6 +15,7 @@ interface NavLinkProps {
   icon: React.ReactNode;
   text: string;
 }
+
 
 function EvaluatePage() {
   const [dragActive, setDragActive] = useState(false);
@@ -86,6 +88,36 @@ function EvaluatePage() {
     handleFiles(selectedFiles);
   };
 
+  const startAnalysis = async (fileStatus: FileStatus) => {
+    setFiles(prevFiles =>
+      prevFiles.map(f =>
+        f.file === fileStatus.file ? { ...f, analysisStatus: 'analyzing' } : f
+      )
+    );
+
+    try {
+      //console.log('to backend filestatus', fileStatus);
+      const response = await fetch(`http://localhost:3002/start-analysis?file=${fileStatus.file.name}`)
+      
+      if (response.ok) {
+        const result = await response.json();
+        console.log('analysis result', result);
+        setFiles(prevFiles =>
+          prevFiles.map(f =>
+            f.file === fileStatus.file ? { ...f, analysisStatus: 'complete' } : f
+          )
+        );
+      }
+
+      if (!response.ok) {
+        throw new Error(`Error starting analysis: ${response.statusText}`);
+      }
+
+    } catch (error) {
+      console.error('Error starting analysis:', error);
+    }
+  };
+
   const handleFiles = async (selectedFiles: File[]) => {
     const newFiles = selectedFiles.map(file => ({
       file,
@@ -111,10 +143,18 @@ function EvaluatePage() {
         setFiles(prevFiles =>
           prevFiles.map(f =>
             f.file === fileStatus.file
-              ? { ...f, status: 'success', fileUrl: result.fileUrl }
+              ? { ...f, 
+                status: 'success', 
+                fileUrl: result.fileUrl,
+                analysisStatus: result.message.includes('already exists') ? 'complete' : 'not_started' 
+              }
               : f
           )
         );
+
+        // console.log('analysis status', files);
+
+        
       } catch (error) {
         setFiles(prevFiles =>
           prevFiles.map(f =>
@@ -124,6 +164,7 @@ function EvaluatePage() {
       }
     }
   };
+
 
   return (
     <div className="min-h-screen bg-custom-black py-12">
@@ -208,11 +249,40 @@ function EvaluatePage() {
           ))}
 
           {/* Show Analysis link if at least one file has been successfully uploaded */}
+          {/* 
           {files.some(file => file.status === 'success') && (
             <nav className="hidden md:flex space-x-4 flex-1 justify-center">
             <NavLink to="/analysis" icon={<LineChart />} text="Analysis" />
             </nav>
           )}
+          */}
+          
+
+          {files.map(file => (
+            <div key={file.file.name}>
+              <nav className="hidden md:flex space-x-4 flex-1 justify-center">
+                {file.status === 'success' && (
+                  <nav className="hidden md:flex space-x-4 flex-1 justify-center">
+                    {file.analysisStatus === 'complete' ? 
+                      <NavLink to="/analysis" icon={<LineChart />} text="Analysis" /> 
+                      : null
+                    }
+                    {file.analysisStatus === 'not_started' ? (
+                      <button onClick={() => startAnalysis(file)} className="flex items-center space-x-2">
+                        <LineChart />
+                        <span>Start Analysis</span>
+                      </button>
+                    ) : file.analysisStatus === 'complete' ? (
+                      <NavLink to="/analysis" icon={<LineChart />} text="Analysis" />
+                    ) : (
+                      <span>Analyzing...</span>
+                    )}
+                  </nav>
+                )}
+              </nav>
+            </div>
+          ))}
+
 
           <div className="mt-8 border-t pt-6">
             <h3 className="text-lg text-gray-400 font-medium mb-4">Instructions</h3>

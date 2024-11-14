@@ -32,12 +32,15 @@ const AnalysisPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-950 text-white p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-0">
           <h2 className="text-4xl mb-4 font-bold">Select a Company</h2>
             <select
               className="selectstyle ml-10"
               onChange={(e) => handleCompanyClick(e.target.value)}
             >
+              <option value="" disabled selected>
+                Select a company
+              </option>
               {companies.map((company) => (
                 <option key={company} value={company}>
                   {company}
@@ -46,11 +49,14 @@ const AnalysisPage: React.FC = () => {
             </select>
 
         </div>
-        {selectedCompany && (
-          <div className="mt-0">
-            <ESGDashboard company={selectedCompany} />
-          </div>
-        )}
+        <div className="flex items-center justify-between mb-0">
+          {/* add dash line */}
+          <hr className="border-2 border-gray-700 w-full" />
+        </div>
+
+        <div className="mt-0">
+        <ESGDashboard company={selectedCompany || 'United Overseas Bank Limited'} />
+      </div>
       </div>
     </div>
   );

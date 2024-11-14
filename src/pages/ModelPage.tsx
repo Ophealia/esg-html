@@ -78,7 +78,7 @@ function ESGScoringPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 px-6">
+      <section className="relative overflow-hidden py-10 px-6">
         <div className="absolute inset-0 bg-gradient-to-r from-green-500/20 to-green-700/20 opacity-50" />
         <div className="relative max-w-7xl mx-auto">
           <div className="text-center">
@@ -94,21 +94,21 @@ function ESGScoringPage() {
       </section>
 
       {/* Key Metrics Grid */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="max-w-screen-xl mx-auto px-6 py-16 mt-0">
+        <div className="grid grid-cols-4 gap-4">
           {[ 
-            { icon: <Scale className="w-8 h-8" />, title: "Balanced Scoring", value: "3-Tier System" },
-            { icon: <BarChart3 className="w-8 h-8" />, title: "Matrix", value: "50+" },
-            { icon: <CheckCircle2 className="w-8 h-8" />, title: "Accuracy Rate", value: "90%" },
-            { icon: <GraduationCap className="w-8 h-8" />, title: "Industry Coverage", value: "Finance" }
+            { icon: <Scale className="w-10 h-10" />, title: "Balanced Scoring", value: "3-Tier System" },
+            { icon: <BarChart3 className="w-10 h-10" />, title: "Matrix", value: "50+" },
+            { icon: <CheckCircle2 className="w-10 h-10" />, title: "Accuracy Rate", value: "90%" },
+            { icon: <GraduationCap className="w-10 h-10" />, title: "Industry Coverage", value: "Finance" }
           ].map((item, index) => (
             <div
               key={index}
               className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 hover:border-green-200 transition-all duration-300"
             >
               <div className="text-gre mb-4">{item.icon}</div>
-              <h3 className="text-lg font-semibold text-gray-100">{item.title}</h3>
-              <p className="text-2xl font-bold text-green-500 mt-2">{item.value}</p>
+              <h3 className="text-xl font-semibold text-gray-100">{item.title}</h3>
+              <p className="text-3xl font-bold text-green-500 mt-2">{item.value}</p>
             </div>
           ))}
         </div>
@@ -118,11 +118,14 @@ function ESGScoringPage() {
       <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         {dimensions.map((dimension, dimIndex) => (
           <div key={dimIndex} className="bg-gray-800 p-6 rounded-xl border border-gray-700 transform transition-all hover:scale-105 hover:shadow-lg hover:border-green-200">
-            <h2 className="text-2xl font-semibold text-gre mb-4">{dimension.title}</h2>
+            <h2 className="text-3xl font-semibold text-gre mb-4">{dimension.title}</h2>
 
             {/* Total Progress Bar */}
             <div className="mb-6">
-              <div className="font-medium text-gray-300 mb-1">Total Weight: {dimension.weight}%</div>
+              <div className='grid grid-cols-4 gap-4'>
+                <div className="col-span-3 font-medium text-gray-300 mb-1">Total Weight: </div>
+                <div className="text-right text-3xl font-semibold text-custom-green">{dimension.weight}%</div>
+              </div>
               <div className="relative pt-1">
                 <div
                   className="progress-bar h-4 bg-gradient-to-r from-gre to-green-600 rounded-md transition-all duration-500 ease-in-out"
@@ -138,7 +141,7 @@ function ESGScoringPage() {
             <div>
               {dimension.metrics.map((metric, metricIndex) => (
                 <div key={metricIndex} className="flex justify-between items-center mb-4">
-                  <div className="text-sm text-gray-300">{metric.name}</div>
+                  <div className="text-base text-gray-300">{metric.name}</div>
                   <div className="w-1/2">
                     <div className="relative pt-1">
                       <div
@@ -150,7 +153,7 @@ function ESGScoringPage() {
                       />
                     </div>
                   </div>
-                  <div className="text-sm font-semibold text-gray-200">{metricProgress[dimIndex][metricIndex]}%</div>
+                  <div className="text-base font-semibold text-gray-200">{metricProgress[dimIndex][metricIndex]}%</div>
                 </div>
               ))}
             </div>
@@ -160,7 +163,7 @@ function ESGScoringPage() {
 
       {/* Coverage Score */}
       <section className="max-w-7xl mx-auto px-6 py-12">
-        <h2 className="text-2xl font-bold mb-8 text-center text-gre">Coverage Score</h2>
+        <h2 className="text-4xl font-bold mb-8 text-center text-gre">Coverage Score</h2>
         <div className="bg-gray-800/50 p-6 rounded-md shadow-md">
           <p className="text-gray-400">
             Coverage score reflects the proportion of reported metrics, influencing up to 10% of the final ESG score.
@@ -175,7 +178,7 @@ function ESGScoringPage() {
 
       {/* Rating Scale */}
       <section className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-gre to-gre">
+        <h2 className="text-4xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-gre to-gre">
           ESG Rating Scale
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
@@ -199,13 +202,13 @@ function ESGScoringPage() {
 
       {/* Scoring Methodology */}
       <section className="max-w-7xl mx-auto px-6 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center text-gre">Scoring Methodology</h2>        
+        <h2 className="text-4xl font-bold mb-8 text-center text-gre">Scoring Methodology</h2>        
         <p className="text-white text-center mb-8">
           Each indicator is scored based on its z-score relative to the industry average, with adjustments for positive or negative directionality
         </p>
         <div className="space-y-6">
           <div className="p-6 bg-gray-800/50 rounded-lg shadow-lg">
-          <li className="flex items-center gap-2">
+          <li className="flex text-2xl items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-gre" />
                 Z-Score
               </li>
@@ -244,16 +247,16 @@ function ESGScoringPage() {
 
       {/* Individual Sections for Key Points */}
       <section className="max-w-7xl mx-auto px-6 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center text-gre">Key Methodological Points</h2>
+        <h2 className="text-4xl font-bold mb-8 text-center text-gre">Key Methodological Points</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div className="p-6 bg-gray-800/50 rounded-lg shadow-lg">
-            <h3 className="text-xl font-bold mb-4">Coverage Score</h3>
+            <h3 className="text-3xl font-bold mb-4">Coverage Score</h3>
             <p className="text-gray-400">
               The coverage scores rewards companies based on the proportion of reported metrics, contributing 10% to the final ESG score. This score encourages companies to disclose more comprehensive ESG data, as higher transparency leads to a more favorable coverage score.
             </p>
           </div>
           <div className="p-6 bg-gray-800/50 rounded-lg shadow-lg">
-            <h3 className="text-xl font-bold mb-4">Handling Missing Data</h3>
+            <h3 className="text-3xl font-bold mb-4">Handling Missing Data</h3>
             <p className="text-gray-400">
               a. If a metric is missing, the industry average is used as a substitute to avoid penalizing companies for non-reporting. Since the total score includes a coverage score that reflects the proportion of reported metrics, this substitution ensures that companies are not penalized twice for missing data.<br />
               b. If an industry standard deviation is zero, a neutral score of 5 is applied.<br />
@@ -261,7 +264,7 @@ function ESGScoringPage() {
             </p>
           </div>
           <div className="p-6 bg-gray-800/50 rounded-lg shadow-lg">
-            <h3 className="text-xl font-bold mb-4">Industry Benchmark</h3>
+            <h3 className="text-3xl font-bold mb-4">Industry Benchmark</h3>
             <p className="text-gray-400">
               In the absence of explicit ESG benchmarks, our scoring system treats the industry average as an implicit benchmark. This means that a company’s ESG performance is evaluated relative to the average level within its industry. This approach ensures the scoring system is reliable even without official benchmarks, while also capturing trends and performance levels across the industry.
             </p>
@@ -271,7 +274,7 @@ function ESGScoringPage() {
 
       {/* Example Calculation with Placeholder for Images */}
       <section className="max-w-7xl mx-auto px-6 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center text-gre">Example Calculation</h2>
+        <h2 className="text-4xl font-bold mb-8 text-center text-gre">Example Calculation</h2>
         <div className="p-6 bg-gray-800/50 rounded-lg shadow-lg">
           <h3 className="text-2xl font-bold mb-4 text-center">Case Study: Company A</h3>
           <p className="text-gray-400 mb-4">The following is a step-by-step calculation of the ESG score for a hypothetical company, including a visual guide for each step:</p>

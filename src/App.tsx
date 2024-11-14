@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Home, FileText, BarChart2, LineChart, Users, Menu, X, FileCheck } from 'lucide-react';
+import { Home, FileText, BarChart2, LineChart, Users, Menu, X, FileCheck , RouteIcon} from 'lucide-react';
 import HomePage from './pages/HomePage';
 import EvaluatePage from './pages/EvaluatePage';
 import ModelPage from './pages/ModelPage';
 import AnalysisPage from './pages/AnalysisPage';
 import ContactPage from './pages/ContactPage';
 import ValidationPage from './pages/Validation';
+import WorkflowPage from './pages/WorkflowPage';
 import { FaLeaf } from 'react-icons/fa';
 
 interface NavLinkProps {
@@ -37,6 +38,7 @@ function App() {
             <NavLink to="/model" icon={<BarChart2 />} text="Model" />
             <NavLink to="/analysis" icon={<LineChart />} text="Analysis" />
             <NavLink to="/validation" icon={<FileCheck />} text="Validation" />
+            <NavLink to="/workflow" icon={<RouteIcon />} text="Workflow" />
             <NavLink to="/contact" icon={<Users />} text="Contact" />
           </nav>
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden">
@@ -73,6 +75,7 @@ function App() {
             <Route path="/analysis" element={<AnalysisPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/validation" element={<ValidationPage />} />
+            <Route path="/workflow" element={<WorkflowPage />} />
           </Routes>
         </main>
       </div>
