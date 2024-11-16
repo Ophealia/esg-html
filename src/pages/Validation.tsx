@@ -102,32 +102,32 @@ function Validation() {
     { key: 'missingValue', label: 'Missing Value' },
     { key: 'extract_score', label: 'Extract Score' },
     { key: 'report_score', label: 'Report Score' },
-    { key: 'file_path', label: 'View PDF' },
-    { key: 'json_data', label: 'View JSON' },
+    { key: 'file_path', label: 'Report' },
+    { key: 'json_data', label: 'Metrics' },
   ];
 
   return (
-      <div className="min-h-screen bg-black text-white p-8">
-      <h1 className="text-2xl font-bold mb-6">ESG Company Data</h1>
+      <div className="min-h-screen bg-black text-white p-8 mr-10 ml-10">
+      <h1 className="text-4xl font-bold mb-6">ESG Company Data</h1>
       
       {/* 表格 */}
       <div className="overflow-x-auto mb-8">
         <table className="w-full border border-gray-700">
           <thead>
-              <tr>
-              {tableHeaders.map(header => (
-                <th
-                  key={header.key}
-                  className="p-4 border border-gray-700 text-left cursor-pointer"
-                  onClick={() => handleSort(header.key)}
-                >
-                  {header.label}
-                  {sortConfig && sortConfig.key === header.key && (
-                    <span>{sortConfig.direction === 'ascending' ? ' 🔼' : ' 🔽'}</span>
-                  )}
-                </th>
-              ))}
-              </tr>
+            <tr>
+            {tableHeaders.map(header => (
+              <th
+                key={header.key}
+                className="p-4 border border-gray-700 text-left cursor-pointer"
+                onClick={() => handleSort(header.key)}
+              >
+                {header.label}
+                {sortConfig && sortConfig.key === header.key && (
+                  <span>{sortConfig.direction === 'ascending' ? ' 🔼' : ' 🔽'}</span>
+                )}
+              </th>
+            ))}
+            </tr>
           </thead>
           <tbody>
             {sortedData.map((company, index) => (

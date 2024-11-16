@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, ChevronDown, ChevronRight, ExternalLink, Code, Book, BookOpen, ArrowDown, ArrowRight } from 'lucide-react';
+import { FileText, ChevronDown, ChevronRight, ExternalLink, Code, BookOpen, ArrowDown } from 'lucide-react';
 import { Github} from 'lucide-react';
 
 

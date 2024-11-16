@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { ScoreCard } from '../ScoreCard.tsx';
 import { MetricChart } from '../MetricChart.tsx';
 import { ESGBreakdown } from '../ESGBreakdown.tsx';
-import { Cloud , Leaf, Users, Building2, TreePine, Factory, Scale, Heart, Diameter } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Cloud , Users, Building2, TreePine } from 'lucide-react';
+import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { Newspaper, TrendingUp, AlertTriangle, Award, ArrowRight, ExternalLink } from 'lucide-react';
+import { Newspaper, TrendingUp } from 'lucide-react';
 import ESGScoreComponent from '../data/esgscore';
 
 
@@ -34,19 +34,9 @@ interface realtime {
   timestamp: string;
 }
 
-interface advice {
-  title: string;
-  text: string;
-}
-
 interface greenwash {
   rate: string;
   reason: string;
-}
-
-// Matrix Coverage
-interface MatrixCoverageProps {
-  matrixnumber: number;
 }
 
 interface AdviceCardProps {
@@ -63,7 +53,7 @@ const ProgressCard: React.FC<{ matrixnumber: number; totalMatrixCount: number }>
       <div className="bg-gray-900 p-6 rounded-lg shadow-md border border-green-800 w-full">
         <div className="flex items-center mb-4">
           <TreePine size={24} className="text-green-600" />
-          <span className="ml-2 font-semibold text-lg">Matrix Coverage</span>
+          <span className="ml-2 font-semibold text-2xl">Matrix Coverage</span>
         </div>
         <div className="relative">
           {/* 底部进度条 - 灰色 */}
@@ -79,7 +69,7 @@ const ProgressCard: React.FC<{ matrixnumber: number; totalMatrixCount: number }>
           />
 
           {/* 显示当前进度和总进度 */}
-          <div className="absolute bottom-8 left-0 w-full text-right text-sm text-white pr-2 z-10">
+          <div className="absolute bottom-8 left-0 w-full text-right text-xl text-white pr-2 z-10">
             {matrixnumber}/{totalMatrixCount}
           </div>
         </div>
@@ -94,7 +84,7 @@ const AdviceCard: React.FC<AdviceCardProps> = ({ title, icon, text }) => {
     <div className="bg-gray-900 p-6 rounded-lg shadow-md border border-green-800 w-full">
       <div className="flex items-center space-x-2">
         {icon}
-        <h3 className="text-lg font-semibold">{title}</h3>
+        <h3 className="text-2xl font-semibold">{title}</h3>
       </div>
       <p className="mt-2 text-white">{text}</p> {/* 显示动态的建议文本 */}
     </div>
@@ -250,7 +240,13 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
 
   return (
     <div className="w-full mx-auto bg-gray-950 text-white p-8">
-       <div className="grid grid-cols-1 gap-6 mb-4">
+      {/* Matrix Coverage */}
+      <div className="grid grid-cols-1 gap-6 mb-4">
+        <ProgressCard matrixnumber={matrixnumber ?? 0} totalMatrixCount={45} />
+      </div>
+
+      {/* Advice */}
+      <div className="grid grid-cols-1 gap-6 mb-4">
         <AdviceCard 
           title="Advice" 
           icon={<Cloud size={25} color="#7FF000" />} 
@@ -262,13 +258,10 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
             socialScore={esgData.socialScore ?? 0}
             governanceScore={esgData.governanceScore ?? 0}
           />
-          } // 传递动态建议文本
+          } 
         />
       </div>     
 
-      <div className="grid grid-cols-1 gap-6 mb-4">
-        <ProgressCard matrixnumber={matrixnumber ?? 0} totalMatrixCount={45} />
-      </div>
 
       {/* ESG Scores */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

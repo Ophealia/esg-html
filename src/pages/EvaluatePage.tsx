@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, FileText, CheckCircle, AlertCircle, LineChart, Files, } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle, LineChart } from 'lucide-react';
 
 
 interface FileStatus {
@@ -33,25 +33,11 @@ function EvaluatePage() {
         throw new Error(`Error reading file: ${response.statusText}`);
       }
       const data = await response.arrayBuffer();
-      
-      if (path.endsWith('.xlsx')) {
-        const worker = new Worker(new URL('../worker/xlsxWorker.js', import.meta.url));
-        worker.postMessage({ data, path });
 
-        worker.onmessage = function (e) {
-          if (e.data.error) {
-            setIsPreviewVisible(false);
-          } else {
-            setFileContent(e.data.result);
-            setIsPreviewVisible(true);
-          }
-          worker.terminate();
-        };
-      } else {
-        const text = new TextDecoder().decode(data);
-        setFileContent(text);
-        setIsPreviewVisible(true);
-      }
+      const text = new TextDecoder().decode(data);
+      setFileContent(text);
+      setIsPreviewVisible(true);
+
     } catch (error: any) {
       console.error(error);
       setIsPreviewVisible(false);
@@ -347,7 +333,7 @@ function EvaluatePage() {
           <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
             <div className="bg-white rounded-lg p-6 w-3/4 max-w-4xl">
               <h2 className="text-2xl font-bold mb-4">File Preview</h2>
-              <pre className="bg-gray-100 p-4 text-xs rounded-lg overflow-auto max-h-96">{fileContent}</pre>
+              <pre className="bg-gray-100 p-4 text-xs rounded-lg overflow-auto max-h-96 whitespace-pre-wrap">{fileContent}</pre>
               <button
                 className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
                 onClick={handleClosePreview}

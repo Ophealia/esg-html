@@ -73,7 +73,6 @@ const getDimensionRecommendation = (dimension: string, score: number) => {
 
 const ESGScoreComponent: React.FC<ESGScoreProps> = ({
   rating,
-  overallScore,
   environmentScore,
   socialScore,
   governanceScore,
@@ -103,68 +102,65 @@ const ESGScoreComponent: React.FC<ESGScoreProps> = ({
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       {/* 总体评估部分 */}
-      <div style={{ marginBottom: '20px'}}>
+      <div className='text-2xl' style={{ marginBottom: '20px'}}>
         <h3>
-            <span style={{ color: '#7FF000' }}>
-            <FaThumbsUp /> 
-            Overall: {rating}
+            <span style={{ color: '#7FF000', display: 'inline-flex', alignItems: 'center' }}> 
+              <FaThumbsUp style={{ marginRight: '8px' }}/> Overall: {rating}
             </span>
         </h3>
-        <p>{overallRecommendation}</p>
+        <p className="text-lg">{overallRecommendation}</p>
       </div>
 
       {/* 环境评估部分 */}
-      <div style={{ marginBottom: '20px' }}>
+      <div className='text-2xl' style={{ marginBottom: '20px' }}>
         <h3>
-            <span style={{ color: '#7FF000' }}>
-            <FaTree /> 
+            <span style={{ color: '#7FF000', display: 'inline-flex', alignItems: 'center' }}>
+            <FaTree style={{ marginRight: '8px' }}/> 
             Environment: {environmentLevel}
             </span>
         </h3>
         <ul>
-          <li><strong>Advice(1): </strong>{environmentRecommendation}</li>
+          <li className="text-lg"><strong>Advice(1): </strong>{environmentRecommendation}</li>
         </ul>
       </div>
 
       {/* 社会评估部分 */}
-      <div style={{ marginBottom: '20px' }}>
+      <div className='text-2xl' style={{ marginBottom: '20px' }}>
         <h3>
-            <span style={{ color: '#7FF000' }}>
-            <FaUsers /> 
+            <span style={{ color: '#7FF000', display: 'inline-flex', alignItems: 'center'  }}>
+            <FaUsers style={{ marginRight: '8px' }}/> 
             Social: {socialLevel}
             </span>
         </h3>
         <ul>
-          <li><strong>Advice(2): </strong>{socialRecommendation}</li>
+          <li className="text-lg"><strong>Advice(2): </strong>{socialRecommendation}</li>
         </ul>
       </div>
 
       {/* 治理评估部分 */}
-      <div style={{ marginBottom: '20px' }}>
+      <div className='text-2xl' style={{ marginBottom: '20px' }}>
         <h3>
-            <span style={{ color: '#7FF000' }}>
-            <FaGavel /> 
+            <span style={{ color: '#7FF000', display: 'inline-flex', alignItems: 'center'  }}>
+            <FaGavel style={{ marginRight: '8px' }}/> 
             Governance: {governanceLevel}
             </span>
             </h3>
         <ul>
-          <li><strong>Advice(3): </strong>{governanceRecommendation}</li>
+          <li className="text-lg"><strong>Advice(3): </strong>{governanceRecommendation}</li>
         </ul>
       </div>
 
       {/* 赞扬部分 */}
       <div>
         <h3>
-            <span style={{ color: '#7FF000' }}>
-            <FaThumbsUp /> Good Job!
-            </span>
-            </h3>
-        <p>{praise}</p>
+          <span className='text-2xl' style={{ color: '#7FF000', display: 'inline-flex', alignItems: 'center'  }}>
+          <FaThumbsUp style={{ marginRight: '8px' }}/> Good Job!
+          </span>
+        </h3>
+        <p className="text-lg">{praise}</p>
       </div>
     </div>
   );
 };
-
-
 
 export default ESGScoreComponent;

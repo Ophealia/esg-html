@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { m, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { TreePine, Droplets, Trash2, Factory } from 'lucide-react';
 

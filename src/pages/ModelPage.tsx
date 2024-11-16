@@ -1,5 +1,5 @@
-import { Scale, BarChart3, CheckCircle2, GraduationCap, BarChart } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { Scale, BarChart3, CheckCircle2, GraduationCap } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import modelcase from '../components/modelcase.jpg'
 
 

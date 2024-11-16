@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { ArrowRight, Leaf, Users, Scale, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion, useAnimation, AnimatePresence } from 'framer-motion';
+import { motion, useAnimation} from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
 function HomePage() {
@@ -46,7 +46,7 @@ const HeroSection = () => {
         transition={{ duration: 3 }}
       >
         <motion.h1
-          className="text-6xl md:text-8xl font-bold mb-6 font-extrabold"
+          className="text-6xl md:text-8xl font-bold mb-6"
           initial="hidden"
           animate={controls}
           variants={{
