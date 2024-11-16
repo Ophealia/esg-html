@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { ScoreCard } from '../ScoreCard.tsx';
 import { MetricChart } from '../MetricChart.tsx';
 import { ESGBreakdown } from '../ESGBreakdown.tsx';
-import { Leaf, Users, Building2, TreePine, Factory, Scale, Heart, Diameter } from 'lucide-react';
+import { Cloud , Leaf, Users, Building2, TreePine, Factory, Scale, Heart, Diameter } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { Newspaper, TrendingUp, AlertTriangle, Award, ArrowRight, ExternalLink } from 'lucide-react';
+import ESGScoreComponent from '../data/esgscore';
+
 
 interface ESGData {
+  rating: string;
+  overallScore: number;
   environmentScore: number;
   socialScore: number;
   governanceScore: number;
@@ -30,6 +34,11 @@ interface realtime {
   timestamp: string;
 }
 
+interface advice {
+  title: string;
+  text: string;
+}
+
 interface greenwash {
   rate: string;
   reason: string;
@@ -39,6 +48,13 @@ interface greenwash {
 interface MatrixCoverageProps {
   matrixnumber: number;
 }
+
+interface AdviceCardProps {
+  title: string;
+  icon: React.ReactNode;
+  text: React.ReactNode;
+}
+
 
 const ProgressCard: React.FC<{ matrixnumber: number; totalMatrixCount: number }> = ({ matrixnumber, totalMatrixCount }) => {
 
@@ -73,12 +89,26 @@ const ProgressCard: React.FC<{ matrixnumber: number; totalMatrixCount: number }>
   );
 };
 
+const AdviceCard: React.FC<AdviceCardProps> = ({ title, icon, text }) => {
+  return (
+    <div className="bg-gray-900 p-6 rounded-lg shadow-md border border-green-800 w-full">
+      <div className="flex items-center space-x-2">
+        {icon}
+        <h3 className="text-lg font-semibold">{title}</h3>
+      </div>
+      <p className="mt-2 text-white">{text}</p> {/* 显示动态的建议文本 */}
+    </div>
+  );
+};
+
 
 
 const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
   const [expandedItems, setExpandedItems] = useState<{ [key: number]: boolean }>({});
   const [hoveredNews, setHoveredNews] = useState<number | null>(null);
   const [esgData, setEsgData] = useState<ESGData>({
+    rating: '',
+    overallScore: 0,
     environmentScore: 0,
     socialScore: 0,
     governanceScore: 0,
@@ -142,9 +172,12 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
         const news_parsedData = news_jsonData.flat(); 
         
         console.log('greenwash_jsonData:', greenwash_jsonData);
+
         // Assuming the backend returns an array of objects with the required fields
         const esgData = esg_parsedData.reduce(
           (acc: ESGData, item: any) => {
+            acc.rating = item['Letter Rating'];
+            acc.overallScore += item['Total ESG Score'] || 0;
             acc.environmentScore += item['ENV Score'] || 0;
             acc.socialScore += item['SOC Score'] || 0;
             acc.governanceScore += item['GOV Score'] || 0;
@@ -170,6 +203,8 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
             return acc;
           },
           {
+            rating: '',
+            overallScore: 0,
             environmentScore: 0,
             socialScore: 0,
             governanceScore: 0,
@@ -193,10 +228,11 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
           const company_report = company + '_report';
           return item['report'] === company_report;
         });
-  
+   
         const result = matrixItem ? 45 - matrixItem['total_missing_fields_count'] : null;
         
         setEsgData(esgData);
+        console.log('ESG Data:', esgData);
         setRealtimeData(realtimeData);
         setGreenwashData(greenwashData);
         setMatrixNumber(result);
@@ -214,6 +250,22 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
 
   return (
     <div className="w-full mx-auto bg-gray-950 text-white p-8">
+       <div className="grid grid-cols-1 gap-6 mb-4">
+        <AdviceCard 
+          title="Advice" 
+          icon={<Cloud size={25} color="#7FF000" />} 
+          text={
+            <ESGScoreComponent
+            rating={esgData.rating ?? ''}
+            overallScore={esgData.overallScore ?? 0}
+            environmentScore={esgData.environmentScore ?? 0}
+            socialScore={esgData.socialScore ?? 0}
+            governanceScore={esgData.governanceScore ?? 0}
+          />
+          } // 传递动态建议文本
+        />
+      </div>     
+
       <div className="grid grid-cols-1 gap-6 mb-4">
         <ProgressCard matrixnumber={matrixnumber ?? 0} totalMatrixCount={45} />
       </div>
