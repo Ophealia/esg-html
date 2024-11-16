@@ -104,7 +104,7 @@ function EvaluatePage() {
         const result = await response.json();
         console.log('analysis result', result);
         const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(60000 - elapsedTime, 0);
+        const remainingTime = Math.max(30000 - elapsedTime, 0);
 
         setTimeout(() => {
           setFiles(prevFiles =>
