@@ -25,7 +25,7 @@ function Validation() {
 
   const handleViewClick = (url: string) => {
     setPdfUrl(`${process.env.REACT_APP_API_BASE_URL}/${url}`);
-    //console.log(`${process.env.REACT_APP_API_BASE_URL}/${url}`);
+    console.log(`pdffile：${process.env.REACT_APP_API_BASE_URL}/${url}`);
     setShowPdf(true);
   };
 
