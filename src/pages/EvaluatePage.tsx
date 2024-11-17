@@ -26,8 +26,8 @@ function EvaluatePage() {
 
   const handleReadClick = async (path: string) => {
     try {
-      console.log(path);
-      const response = await fetch(`http://localhost:3002/read-file?path=${path}`);
+      console.log('read file', path);
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/read-file?path=${path}`);
       
       if (!response.ok) {
         throw new Error(`Error reading file: ${response.statusText}`);
@@ -84,7 +84,7 @@ function EvaluatePage() {
     try {
       const startTime = Date.now();
       //console.log('to backend filestatus', fileStatus);
-      const response = await fetch(`http://localhost:3002/start-analysis?file=${fileStatus.file.name}`)
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/start-analysis?file=${fileStatus.file.name}`)
       
       if (response.ok) {
         const result = await response.json();
@@ -119,7 +119,7 @@ function EvaluatePage() {
       formData.append('file', fileStatus.file);
 
       try {
-        const response = await fetch('http://localhost:3002/upload', {
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/upload`, {
           method: 'POST',
           body: formData,
         });
@@ -129,6 +129,7 @@ function EvaluatePage() {
         }
 
         const result = await response.json();
+        console.log('upload result', result);
         setFiles(prevFiles =>
           prevFiles.map(f =>
             f.file === fileStatus.file

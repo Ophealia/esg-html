@@ -24,7 +24,8 @@ function Validation() {
 
 
   const handleViewClick = (url: string) => {
-    setPdfUrl(`http://localhost:3002${url}`);
+    setPdfUrl(`${process.env.REACT_APP_API_BASE_URL}/${url}`);
+    //console.log(`${process.env.REACT_APP_API_BASE_URL}/${url}`);
     setShowPdf(true);
   };
 
@@ -54,7 +55,8 @@ function Validation() {
       // Fetch the list of companies (file names) from the backend
       const fetchCompanies = async () => {
         try {
-          const response = await fetch('http://localhost:3002/validation-company');
+          const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/validation-company`);
+          console.log('env', process.env.REACT_APP_API_BASE_URL)
           if (!response.ok) {
             throw new Error(`Error fetching companies: ${response.statusText}`);
           }

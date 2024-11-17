@@ -68,7 +68,7 @@ export const EnvironmentalMetrics: React.FC<EnvironmentalMetricsProps> = ({ comp
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3002/score-data?company=${company}`);
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/score-data?company=${company}`);
         if (!response.ok) {
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
@@ -100,7 +100,7 @@ export const EnvironmentalMetrics: React.FC<EnvironmentalMetricsProps> = ({ comp
       console.log('Data fetched:', esgData);
 
       try {
-        const metricsResponse = await fetch(`http://localhost:3002/company-metrics?company=${company}`);
+        const metricsResponse = await fetch(`${process.env.REACT_APP_API_BASE_URL}/company-metrics?company=${company}`);
         if (!metricsResponse.ok) {
           throw new Error(`Error fetching company metrics: ${metricsResponse.statusText}`);
         }

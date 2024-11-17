@@ -11,7 +11,7 @@ const AnalysisPage: React.FC = () => {
     // Fetch the list of companies (file names) from the backend
     const fetchCompanies = async () => {
       try {
-        const response = await fetch('http://localhost:3002/companies');
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/companies`);
         if (!response.ok) {
           throw new Error(`Error fetching companies: ${response.statusText}`);
         }

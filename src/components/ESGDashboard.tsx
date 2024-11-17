@@ -25,7 +25,7 @@ const ESGDashboard: React.FC<ESGDashboardProps> = ({ company }) => {
   useEffect(() => {
     const fetchOverall = async () => {
       try {
-        const response = await fetch(`http://localhost:3002/score-data/?company=${company}`);
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/score-data/?company=${company}`);
         if (!response.ok) {
           throw new Error(`Error fetching overall: ${response.statusText}`);
         }

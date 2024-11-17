@@ -52,7 +52,7 @@ export const SocialMetrics:  React.FC<SocialMetricsProps> = ({ company }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const metricsResponse = await fetch(`http://localhost:3002/company-metrics?company=${company}`);
+        const metricsResponse = await fetch(`${process.env.react_app_api_base_url}/company-metrics?company=${company}`);
         if (!metricsResponse.ok) {
           throw new Error(`Error fetching company metrics: ${metricsResponse.statusText}`);
         }

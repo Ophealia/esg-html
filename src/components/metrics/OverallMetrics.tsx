@@ -132,22 +132,22 @@ const OverallMetrics: React.FC<OverallMetricsProps> = ({ company }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3002/score-data?company=${company}`);
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/score-data?company=${company}`);
         if (!response.ok) {
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
 
-        const news_response = await fetch(`http://localhost:3002/realtime-data?company=${company}`);
+        const news_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/realtime-data?company=${company}`);
         if (!news_response.ok) {
           throw new Error(`Error fetching data: ${news_response.statusText}`);
         }
 
-        const greenwash_response = await fetch(`http://localhost:3002/greenwash-data?company=${company}`);
+        const greenwash_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/greenwash-data?company=${company}`);
         if (!greenwash_response.ok) {
           throw new Error(`Error fetching data: ${greenwash_response.statusText}`);
         }
 
-        const matrix_response = await fetch(`http://localhost:3002/validation-company`);
+        const matrix_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/validation-company`);
         if (!matrix_response.ok) {
           throw new Error(`Error fetching data: ${matrix_response.statusText}`);
         }
